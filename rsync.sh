@@ -478,6 +478,181 @@ syncEtcFolders() \
 
 
 
+################################# TEXT EDITORS #################################
+
+basicsSublimeText() \
+{
+	option "Copying Sublime Text basic settings..."
+
+	case "$(uname -s)" in
+		"Darwin")
+			appLocation="$HOME/Library/Application Support/Sublime Text/Packages/User"
+			binLocation="/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"
+		;;
+		"Linux")
+			appLocation="$HOME/.config/sublime-text/Packages/User"
+			# binLocation="$HOME/.config/sublime-text/bin/subl"
+		;;
+	esac
+
+	[ ! -d "$appLocation" ] && mkdir -pv "$appLocation" && echo
+
+	if [ -e "$binLocation" ] && [ ! -e /usr/local/bin/subl ];
+	then
+		subopt "Symlinking subl binary to /usr/local/bin..."
+		sudo ln -fsv "$binLocation" /usr/local/bin/subl
+		echo
+	fi
+
+	subopt "Rsyncing basic config file..."
+	case $(/usr/local/bin/subl --version | cut -d ' ' -f 4) in
+	4*)
+		rsync -ahPv \
+		"$DOTFILES"/home/config/sublime-text/v4-BasicPreferences.sublime-settings \
+		"$appLocation/Preferences.sublime-settings"
+	;;
+	3*)
+		rsync -ahPv \
+		"$DOTFILES"/home/config/sublime-text/v3-BasicPreferences.sublime-settings \
+		"$appLocation/Preferences.sublime-settings"
+	;;
+	esac
+	echo
+
+	info "Execute '--text-editors full stext' when you have synced all your" \
+	"packages on both text-editors"
+	echo
+}
+
+basicsSublimeMerge() \
+{
+	option "Copying Sublime Merge basic settings..."
+
+	case "$(uname -s)" in
+		"Darwin")
+			appLocation="$HOME/Library/Application Support/Sublime Merge/Packages/User"
+			binLocation="/Applications/Sublime Merge.app/Contents/SharedSupport/bin/smerge"
+		;;
+		"Linux")
+			appLocation="$HOME/.config/sublime-merge/Packages/User"
+			# binLocation="$HOME/.config/sublime-merge/bin/smerge"
+		;;
+	esac
+
+	[ ! -d "$appLocation" ] && mkdir -pv "$appLocation" && echo
+
+	if [ -e "$binLocation" ] && [ ! -e /usr/local/bin/smerge ];
+	then
+		sudo ln -fsv "$binLocation" /usr/local/bin/smerge
+		echo
+	fi
+
+	rsync -ahPv --exclude=".*" \
+	"$DOTFILES"/home/config/sublime-merge/Packages/User/ "$appLocation"
+	echo
+}
+
+basicsVScode() \
+{
+	option "Copying Visual Studio Code basic settings..."
+
+	case "$(uname -s)" in
+		"Darwin")
+			appLocation="$HOME/Library/Application Support/Code/User"
+			binLocation="/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code"
+			cfgLocation="$DOTFILES"/home/config/vscode/MacBasicSettings.json
+		;;
+		"Linux")
+			appLocation="$HOME/.config/Code/User"
+			# binLocation="$HOME/.config/Code/bin/code"
+			cfgLocation="$DOTFILES"/home/config/vscode/LinuxBasicSettings.json
+		;;
+	esac
+
+	[ ! -d "$appLocation" ] && mkdir -pv "$appLocation" && echo
+
+	if [ -e "$binLocation" ] && [ ! -e /usr/local/bin/code ];
+	then
+		sudo ln -fsv "$binLocation" /usr/local/bin/code
+		echo
+	fi
+
+	rsync -ahPv "$cfgLocation" "$appLocation/settings.json"
+	echo
+
+	subopt "Installing Visual Studio Code extensions..."
+
+	while IFS=, read -r extension <&9;
+	do
+			if [ -z "$extension" ]; then
+				continue
+			fi
+			code --install-extension "$extension"
+	done \
+	9< "$DOTFILES"/home/config/vscode/extensions.csv
+	echo
+
+	info "Execute '--text-editors full vscode' when you have synced all your" \
+	"packages on both text-editors"
+	echo
+}
+
+# ------------------------------------------------------------------------------
+
+fullSublimeText() \
+{
+	option "Copying Sublime Text full-featured settings..."
+
+	case "$(uname -s)" in
+		"Darwin")
+			appLocation="$HOME/Library/Application Support/Sublime Text/Packages/User"
+			binLocation="/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"
+		;;
+		"Linux")
+			appLocation="$HOME/.config/sublime-text/Packages/User"
+			# binLocation="$HOME/.config/sublime-text/bin/subl"
+		;;
+	esac
+
+	case $(subl --version | cut -d ' ' -f 4) in
+		4*)
+			rsync -ahPv \
+			"$DOTFILES"/home/config/sublime-text/v4-FullPreferences.sublime-settings \
+			"$appLocation/Preferences.sublime-settings"
+		;;
+		3*)
+			rsync -ahPv \
+			"$DOTFILES"/home/config/sublime-text/v3-FullPreferences.sublime-settings \
+			"$appLocation/Preferences.sublime-settings"
+		;;
+	esac
+
+	rsync -ahPv --exclude=".*" \
+	"$DOTFILES"/home/config/sublime-text/Packages/User/ "$appLocation"
+	echo
+}
+
+fullVscode() \
+{
+	option "Copying Visual Studio Code full-featured settings..."
+
+	case "$(uname -s)" in
+		"Darwin")
+			rsync -ahPv "$DOTFILES"/home/config/vscode/MacFullSettings.json \
+			"$HOME/Library/Application Support/Code/User/settings.json"
+		;;
+		"Linux")
+			rsync -ahPv "$DOTFILES"/home/config/vscode/LinuxFullSettings.json \
+			"$HOME/.config/Code/User/settings.json"
+		;;
+	esac
+	echo
+}
+
+################################################################################
+
+
+
 ################################# PREFERENCES ##################################
 
 setup_preferences() \
@@ -716,183 +891,8 @@ setup_library_sounds() \
 			sudo chown -Rv root:staff "/Library/Sounds/$(basename "$snds")"
 		fi
 	done \
-	< <(find "$HOME/Library/Mobile Documents/com~apple~QuickTimePlayerX/Documents/Ringtones" \
+	< <(find "$HOME/Library/Mobile Documents/com~apple~QuickTimePlayerX/Documents/Alerts" \
 		-maxdepth 1 -type f -print0)
-	echo
-}
-
-################################################################################
-
-
-
-################################# TEXT EDITORS #################################
-
-basicsSublimeText() \
-{
-	option "Copying Sublime Text basic settings..."
-
-	case "$(uname -s)" in
-		"Darwin")
-			appLocation="$HOME/Library/Application Support/Sublime Text/Packages/User"
-			binLocation="/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"
-		;;
-		"Linux")
-			appLocation="$HOME/.config/sublime-text/Packages/User"
-			# binLocation="$HOME/.config/sublime-text/bin/subl"
-		;;
-	esac
-
-	[ ! -d "$appLocation" ] && mkdir -pv "$appLocation" && echo
-
-	if [ -e "$binLocation" ] && [ ! -e /usr/local/bin/subl ];
-	then
-		subopt "Symlinking subl binary to /usr/local/bin..."
-		sudo ln -fsv "$binLocation" /usr/local/bin/subl
-		echo
-	fi
-
-	subopt "Rsyncing basic config file..."
-	case $(/usr/local/bin/subl --version | cut -d ' ' -f 4) in
-	4*)
-		rsync -ahPv \
-		"$DOTFILES"/home/config/sublime-text/v4-BasicPreferences.sublime-settings \
-		"$appLocation/Preferences.sublime-settings"
-	;;
-	3*)
-		rsync -ahPv \
-		"$DOTFILES"/home/config/sublime-text/v3-BasicPreferences.sublime-settings \
-		"$appLocation/Preferences.sublime-settings"
-	;;
-	esac
-	echo
-
-	info "Execute '--text-editors full stext' when you have synced all your" \
-	"packages on both text-editors"
-	echo
-}
-
-basicsSublimeMerge() \
-{
-	option "Copying Sublime Merge basic settings..."
-
-	case "$(uname -s)" in
-		"Darwin")
-			appLocation="$HOME/Library/Application Support/Sublime Merge/Packages/User"
-			binLocation="/Applications/Sublime Merge.app/Contents/SharedSupport/bin/smerge"
-		;;
-		"Linux")
-			appLocation="$HOME/.config/sublime-merge/Packages/User"
-			# binLocation="$HOME/.config/sublime-merge/bin/smerge"
-		;;
-	esac
-
-	[ ! -d "$appLocation" ] && mkdir -pv "$appLocation" && echo
-
-	if [ -e "$binLocation" ] && [ ! -e /usr/local/bin/smerge ];
-	then
-		sudo ln -fsv "$binLocation" /usr/local/bin/smerge
-		echo
-	fi
-
-	rsync -ahPv --exclude=".*" \
-	"$DOTFILES"/home/config/sublime-merge/Packages/User/ "$appLocation"
-	echo
-}
-
-basicsVScode() \
-{
-	option "Copying Visual Studio Code basic settings..."
-
-	case "$(uname -s)" in
-		"Darwin")
-			appLocation="$HOME/Library/Application Support/Code/User"
-			binLocation="/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code"
-			cfgLocation="$DOTFILES"/home/config/vscode/MacBasicSettings.json
-		;;
-		"Linux")
-			appLocation="$HOME/.config/Code/User"
-			# binLocation="$HOME/.config/Code/bin/code"
-			cfgLocation="$DOTFILES"/home/config/vscode/LinuxBasicSettings.json
-		;;
-	esac
-
-	[ ! -d "$appLocation" ] && mkdir -pv "$appLocation" && echo
-
-	if [ -e "$binLocation" ] && [ ! -e /usr/local/bin/code ];
-	then
-		sudo ln -fsv "$binLocation" /usr/local/bin/code
-		echo
-	fi
-
-	rsync -ahPv "$cfgLocation" "$appLocation/settings.json"
-	echo
-
-	subopt "Installing Visual Studio Code extensions..."
-
-	while IFS=, read -r extension <&9;
-	do
-			if [ -z "$extension" ]; then
-				continue
-			fi
-			code --install-extension "$extension"
-	done \
-	9< "$DOTFILES"/home/config/vscode/extensions.csv
-	echo
-
-	info "Execute '--text-editors full vscode' when you have synced all your" \
-	"packages on both text-editors"
-	echo
-}
-
-# ------------------------------------------------------------------------------
-
-fullSublimeText() \
-{
-	option "Copying Sublime Text full-featured settings..."
-
-	case "$(uname -s)" in
-		"Darwin")
-			appLocation="$HOME/Library/Application Support/Sublime Text/Packages/User"
-			binLocation="/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"
-		;;
-		"Linux")
-			appLocation="$HOME/.config/sublime-text/Packages/User"
-			# binLocation="$HOME/.config/sublime-text/bin/subl"
-		;;
-	esac
-
-	case $(subl --version | cut -d ' ' -f 4) in
-		4*)
-			rsync -ahPv \
-			"$DOTFILES"/home/config/sublime-text/v4-FullPreferences.sublime-settings \
-			"$appLocation/Preferences.sublime-settings"
-		;;
-		3*)
-			rsync -ahPv \
-			"$DOTFILES"/home/config/sublime-text/v3-FullPreferences.sublime-settings \
-			"$appLocation/Preferences.sublime-settings"
-		;;
-	esac
-
-	rsync -ahPv --exclude=".*" \
-	"$DOTFILES"/home/config/sublime-text/Packages/User/ "$appLocation"
-	echo
-}
-
-fullVscode() \
-{
-	option "Copying Visual Studio Code full-featured settings..."
-
-	case "$(uname -s)" in
-		"Darwin")
-			rsync -ahPv "$DOTFILES"/home/config/vscode/MacFullSettings.json \
-			"$HOME/Library/Application Support/Code/User/settings.json"
-		;;
-		"Linux")
-			rsync -ahPv "$DOTFILES"/home/config/vscode/LinuxFullSettings.json \
-			"$HOME/.config/Code/User/settings.json"
-		;;
-	esac
 	echo
 }
 
