@@ -198,7 +198,6 @@ os_variants_aliases() \
 
 macos_specific_aliases() \
 {
-
 	alias xcodeinstall='sudo xcode-select --install'
 
 	alias swupdate='softwareupdate --all --install --force'
