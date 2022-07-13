@@ -134,5 +134,5 @@
 	"terminal.external.osxExec": "iTerm2.app",
 	"terminal.integrated.cursorBlinking": true,
 	"terminal.integrated.cursorStyle": "line",
-	"terminal.integrated.fontFamily": "MesloLGMNerdFontComplete-Regular",
+	"terminal.integrated.fontFamily": "MesloLGSNerdFontComplete-Regular",
 }
