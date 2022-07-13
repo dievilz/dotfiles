@@ -1,0 +1,682 @@
+#
+# @dievilz' aliases compilation
+#
+
+################################ SYSTEM ALIASES ################################
+
+
+##### Essential aliases for basic terminal usage
+essential_aliases() \
+{
+	alias noalias='unalias -a'   ## unalias all
+
+	alias lsalias="helpt"
+	alias helpt='printf "\n\033[1mSee your Aliases:\033[0m aliases\n\033[1mSee your Functions:\033[0m functns\n\n\033[1mRe-source your Aliases:\033[0m realias\n\033[1mRe-source your Functions:\033[0m refuncts\n\n\033[1mRe-source Profile, Aliases and Functions:\033[0m refinish\n\n"'
+
+	alias aliases='less "$HOME/.aliases"'
+	alias functns='less "$HOME/.functions"'
+
+	alias realias='. "$HOME/.aliases"'
+	alias refunct='. "$HOME/.functions"'
+
+	alias pathf='echo "$PATH"'; alias pathF=pathf
+	alias pathn='echo "----- -----" && printf "${PATH//:/\\n}"'
+	alias shellType='echo "$SHELL_TYPE"'
+	alias shellPath='lsof -p "$$" | grep -m 1 txt | xargs -n 1 | tail -n +9 | xargs'
+
+	## Reload the shell, you must choose which type of shell you want
+	alias reload='exec "${SHELL}"'
+	alias clir='clear && printf "\033[3J"'
+	alias home='cd ~'
+}
+
+
+##### Sourcing of Shell startup files
+startup_aliases() \
+{
+	if ps -o args= -p $$ | grep -m 1 -Eq '(zsh)'; then
+		alias refresh='. "$ZDOTDIR/.zshrc"'
+		alias shellSource='. /etc/zshenv; . /etc/zshrc; . "$ZDOTDIR"/.zshrc'
+
+	elif ps -o args= -p $$ | grep -m 1 -Eq '(bash)'; then
+		alias refresh='. "$HOME/.bash_profile"'
+		alias shellSource='. $HOME/.bashrc'
+	fi
+
+	alias reprofile='. "$HOME/.profile"'
+
+	case "$(uname -s)" in
+		"Darwin") alias reexport='. "$HOME/.exports-macos"'
+		;;
+		"GNU"|"Linux") alias reexport='. "$HOME/.exports-linux"'
+		;;
+	esac
+
+	alias refinish='echo; reprofile && printf "\033[38;32mProfile sourced!\033[0m\n\n" && realias && printf "\033[38;32mAliases sourced!\033[0m\n\n" && refunct && printf "\033[38;32mFunctions sourced!\033[0m\n\n"'
+}
+
+
+##### Default a normal/bare command operation to use additional options as enabled
+altered_commands_aliases() \
+{
+	alias sudo='sudo '            ## Enable aliases to be sudo’ed
+	alias sudos='sudo -s '
+	alias sudosu='sudo -su '
+
+	alias mkdir='mkdir -pv '      ## Mkdir every folder in between to the last folder
+	alias chmod="chmod -v"
+	alias less="less -NRS -x4 "   ## Line numbers, Format colors, Unwrap lines, Tabs Number
+	alias ssh="ssh ${SSH_CONFIG:-"-F ${XDG_CONFIG_HOME:-$HOME/.etc}/ssh/ssh_config"} "
+	command -v nvim > /dev/null 2>&1 && alias vim="nvim "
+
+	alias startx='startx "$XDG_CONFIG_HOME/X11/xinitrc" -- "$XDG_CONFIG_HOME/X11/xserverrc" vt1'
+	alias xrdb='xrdb -load "$XDG_CACHE_HOME/X11/xresources"'
+
+	alias ack='ack -Sl '                 ##
+	alias fd='fd -HI'                    ## Show hidden, Ignore .ignore files
+	# alias lf=''
+	alias nnn='nnn -dEHoU '              ##
+	alias tree='tree -a -C --dirsfirst ' ## Show all, ?, & dirs first
+	alias wget='wget --hsts-file="$XDG_CACHE_HOME/wget/wget-hsts"'
+
+	alias youtube-dl='youtube-dl --config-location "$XDG_CONFIG_HOME/youtube-dl/config" '
+	alias ydlAudio='youtube-dl -f bestaudio '
+	alias ydlVideo="youtube-dl -f 'bestvideo+bestaudio/bestvideo[ext=mp4]+bestaudio' "
+
+	alias yarn='yarn --use-yarnrc "$XDG_CONFIG_HOME/yarn/config"'
+	alias code='code --extensions-dir "$XDG_DATA_HOME/vscode/extensions"'
+	alias netbeans='netbeans --userdir "$XDG_DATA_HOME/netbeans"'
+}
+
+
+##### System commands shorter and easier to remember without altering their normal function
+shortened_system_aliases() \
+{
+	alias gpgls='gpg --list-secret-keys --keyid-format LONG'
+	alias sshls='ls -al "$SSH_HOME'
+
+	alias findHere="find . -maxdepth 1 -iname "
+
+	alias execFile='chmod -v 744'
+	alias normalFile='chmod -v 644'
+
+	alias normalDir='chmod -v 755'
+	alias writeHome='chmod -v 751 "$HOME"'
+	alias defendHome='chmod -v 551 "$HOME"'
+	alias echoNewShcript='echo "install -m 744 /dev/null"'
+}
+
+
+##### 3rd party commands shorter and easier to remember without altering their normal function
+shortened_3rdparty_aliases() \
+{
+	alias ydl='youtube-dl '
+	alias rd='rmdir '
+
+	alias lc='colorls -A --sd'
+
+	if command -v proctree > /dev/null 2>&1; then
+		alias pstree="proctree"
+	fi
+
+	alias fdHere='fd . --max-depth 1 '
+
+	## <exa>: a=exclude ../., F=append file symbols, g=group, h=header titles
+	alias exa='exa -aFgh --group-directories-first --icons --ignore-glob=".?it|.??it|.???it|.github|*ignored*|*excluded*" --no-filesize --no-time --octal-permissions'
+	## <exa>: l=long details, T=recurse as tree, L=limit depth of recursion
+	alias exal='exa -l '      # A much better version than original <ls -al>
+	alias exaT='exa -T -L '   # A much better version than original  <tree> (Need a depth lvl)
+	alias exalT='exal -T -L ' # Like exaT, but with -l by default           (Need a depth lvl)
+	alias exaT1='exaT 1 '     # You can make these 2 aliases to display...
+	alias exaT2='exaT 2 '     # long details by just adding -l at the end...
+	alias exalT1='exalT 1 '   # but what a drag, so, why not just adding...
+	alias exalT2='exalT 2 '   # it to the aliases then? ¯\_(ツ)_/¯\n";'
+	## exal, exaT1 and exalT1 works almost the same, the diff is that exal isn't tree-like
+
+	alias lolFortune='fortune | lolcat'
+	alias cowFortune='fortune | cowsay | lolcat'
+	alias chuckFortune='chuck_cow | lolcat'
+	#                 = chuck | cowsay | lolcat
+}
+
+
+##### Aliases for my custom scripts/functions
+custom_functions_aliases() \
+{
+	alias xdg='printf "\n\033[1mAlias to basic XDG folders symlinking:\033[0m linkXDG\n\033[1mFunction to enforce XDG compliance:\033[0m verifyXDG\n\n"'
+
+	alias srcaliases=sourceAliases
+	alias linkXDG='multiLink -n "$HOME/.config" "$HOME/.etc" "$HOME/.local/state" "$HOME/.var/lib" "$HOME/.state" "$HOME/.var/lib" "$HOME/.cache" "$HOME/.var/cache"'
+	alias chgzrcDef='changeZshrc default'
+	alias chgzrcOmz='changeZshrc omz'
+}
+
+
+##### Same aliases, different OS variants of the same command (GNU, BSD, etc)
+os_variants_aliases() \
+{
+	if [ "$(uname -s)" = "Darwin" ];
+	then
+		## A=exclude ../.,F=append file symbols,G=colorized,h=Human readable sizes
+		if command -v gls >/dev/null 2>&1;
+		then
+			alias gls='gls -AFh --color=auto --group-directories-first'
+			alias ls='gls'
+		else
+			alias ls='ls -AFGh'
+		fi
+
+		alias bls='/bin/ls -AFGh'
+		alias zip='zip -r -X -x "__MACOSX" -x "._*" -x ".DS_Store"'
+		alias vless='vim -u /usr/share/vim/vim*/macros/less.vim'
+
+	elif [ "$(uname -s)" = "GNU" ] || [ "$(uname -s)" = "Linux" ];
+	then
+		alias ls='ls -AFh --color=auto --group-directories-first'
+
+		alias date='date +"%A %d, %B %Y, %r"' # Weekday 00, Monthname Year, 00:00:00 ~M
+
+		alias pbcopy='xclip -selection clipboard'
+		alias pbpaste='xclip -selection clipboard -o'
+
+		alias ddd='echo "dd bs=4M if=/path/to/the/great/iso/archlinux-20xx.xx.xx-x86_64.iso of=/dev/sdx status=progress oflag=sync"'
+	fi
+
+	shellAl="printf '<ps> \$\$ (NAME):    %s\n' $(ps -o args= -p $$ | grep -m 1 -Eo '\w{0,}sh')"
+	shellAl=$shellAl"; printf '<lsof> \$\$ (PATH):  %s\n' $(lsof -p "$$" | grep -m 1 txt | xargs -n 1 | tail -n +9 | xargs)"
+	shellAl=$shellAl"; printf '\$SHELL:            %s\n' $SHELL"
+	shellAl=$shellAl"; echo 'Directory Service:' $(dscl . -read /Users/"$(id -un)" \
+		UserShell | cut -f 2 -d ' ')"
+	## thisShell'1' is a function
+	alias thisShell2=$shellAl
+
+	llsvar="ls -l | awk '{k=0;for(i=0;i<=8;i++)k+=((substr("
+	llsvar=$llsvar'$1,i+2,1)~/[rwx]/)*2^(8-i));if(k)printf("%0o ",k);print}'
+	llsvar=$llsvar"'"
+	alias lls=$llsvar
+}
+
+macos_specific_aliases() \
+{
+
+	alias xcodeinstall='sudo xcode-select --install'
+
+	alias swupdate='softwareupdate --all --install --force'
+	alias downloadMacOS="softwareupdate --list-full-installers && echo && softwareupdate --fetch-full-installer --full-installer-version "
+
+	alias echoSh='readlink /var/select/sh'
+	alias changeSh='echo "sudo ln -fsv /bin/<posix_shell> /var/select/sh"'
+	alias infomac='sysctl hw.model'
+	alias getUTI="mdls -name kMDItemContentType "
+	alias getOSNames='
+printf "\033[1mComputer Name:  \033[0m" && scutil --get ComputerName 2>/dev/null;
+printf "\033[1mHostname:       \033[0m" && scutil --get HostName 2>/dev/null;
+printf "\033[1mLocal Hostname: \033[0m" && scutil --get LocalHostName 2>/dev/null;
+printf "\033[1mReal Name:      \033[0m" && dscl . -read /Users/"$(id -un)" RealName 2>/dev/null;
+echo'
+
+	alias stedit='sudo -b "/System/Applications/TextEdit.app/Contents/MacOS/TextEdit"'
+
+	### From https://github.com/mathiasbynens/dotfiles/blob/master/.aliases
+		alias cleanup="find . -type f -name '*.DS_Store' -ls -delete"   # Recursively delete .DS_Store files
+
+		command -v hd 1>/dev/null || alias hd='hexdump -C'   # Canonical hex dump; some systems have this symlinked
+		command -v md5sum 1>/dev/null || alias md5sum='md5'   # macOS has no 'md5sum', so use 'md5' as a fallback
+		command -v sha1sum 1>/dev/null || alias sha1sum='shasum'   # macOS has no 'sha1sum', so use 'shasum' as a fallback
+
+		## Empty the Trash on all mounted volumes and the main HDD.
+		## Also, clear Apple’s System Logs to improve shell startup speed.
+		## Finally, clear download history from quarantine. https://mths.be/bum
+		alias emptyTrash="sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv $HOME/.Trash; sudo rm -rfv /private/var/log/asl/*.asl; sqlite3 $HOME/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* 'delete from LSQuarantineEvent'"
+
+		## PlistBuddy alias, because sometimes 'defaults' just doesn’t cut it
+		alias plistbuddy='/usr/libexec/PlistBuddy'
+
+		## Intuitive map function
+		## For example, to list all directories that contain a certain file:
+		## find . -name .gitattributes | map dirname
+		alias map='xargs -n1'
+
+		for method in GET HEAD POST PUT DELETE TRACE OPTIONS; do   # One of @janmoesen’s ProTip™s
+			alias "${method}"="lwp-request -m '${method}'"
+		done
+
+		## Stuff I never really use but cannot delete either because of http://xkcd.com/530/
+		alias stfu="osascript -e 'set volume output muted true'"
+		alias pumpitup="osascript -e 'set volume output volume 90'"
+
+		## Lock the screen (when going 'Away From Keyboard')
+		alias afk="osascript -e 'tell application \"System Events\" to keystroke \"q\" using {command down,control down}'"
+		## Suspend and Log out of the session
+		alias logOut='/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend'
+	###
+
+	alias diffKal='git difftool -y -t Kaleidoscope'
+	alias mergeKal='git mergetool -y -t Kaleidoscope'
+
+	alias logsApache='tail -f /private/var/log/apache2/error_log'
+}
+
+linux_specific_aliases() \
+{
+	alias s="systemctl "
+}
+
+
+##### Quick access aliases for important dirs
+quick_access_aliases() \
+{
+	alias zshrc='subl "$ZDOTDIR/.zshrc"'
+
+	alias dots='subl "$DOTFILES"'
+	alias dotfiles='cd "$DOTFILES"'
+
+	alias omz='subl "$ZSH"'
+	alias ohmyzsh='cd "$ZSH"'
+
+	alias zdir='subl "$ZDOTDIR"'
+	alias zdotdir='cd "$ZDOTDIR"'
+
+	alias shdbug='subl "$SHDEBUG_HOME"'
+	alias shelldebug='cd "$SHDEBUG_HOME"'
+
+	alias pl9k='subl "$POWERLEVEL9K_INSTALLATION_DIR"'
+	alias pwrlvl9k='cd "$POWERLEVEL9K_INSTALLATION_DIR"'
+
+	alias emax='subl "$XDG_CONFIG_HOME/emacs"'
+	alias lyx='subl "$HOME/Music/LyricsX"'
+
+	alias updateomz='cd "$ZSH" && git stash && upgrade_oh_my_zsh && git stash pop'
+}
+
+
+##### Same aliases, different debugging commands depending on the $SHELL
+shell_debug_aliases() \
+{
+	shll="$(ps -o args= -p $$ | grep -m 1 -Eo '\b\w{0,6}sh|koi')"
+
+	if [ "$SHELL_IS_LOGIN" = true ]; then
+		case "$shll" in
+		"zsh")
+			alias debugSesh="$shll"' --login -xvic exit &> "$SHDEBUG_HOME"/Login_zsh-sesh.sh'
+			alias debugEnvVars='printenv 1> "$SHDEBUG_HOME"/Login_zsh-vars.sh'
+			alias debugTrace="$shll"' --login -o SOURCE_TRACE &> >(tee "$SHDEBUG_HOME/Login_zsh-trace.sh")'
+
+			alias debugZshrc="$shll"' -xv "$ZDOTDIR/.zshrc" &> >(tee "$SHDEBUG_HOME/zshrc-debug.sh" 2>/dev/null)'
+		;;
+		"bash")
+			alias debugSesh="$shll"' -xlic exit &> "$SHDEBUG_HOME/Login_bash-sesh.sh"'
+		;;
+		esac
+
+	else
+		case "$shll" in
+		"zsh")
+			alias debugSesh="$shll"' -xvic exit &> "$SHDEBUG_HOME/NonLogin_zsh-sesh.sh"'
+			alias debugEnvVars='printenv 1> "$SHDEBUG_HOME/NonLogin_zsh-vars.sh"'
+			alias debugTrace="$shll"' -io SOURCE_TRACE &> >(tee "$SHDEBUG_HOME/NonLogin_zsh-trace.sh")'
+
+			alias debugZshrc="$shll"' -xvi "$ZDOTDIR/.zshrc" &> >(tee "$SHDEBUG_HOME/zshrc-debug.sh" 2>/dev/null)'
+		;;
+		"bash")
+			alias debugSesh="$shll"' -xic exit &> "$SHDEBUG_HOME/NonLogin_bash-sesh.sh"'
+		;;
+		esac
+	fi
+
+	alias debugShellAll='debugSesh; debugEnvVars; debugTrace'
+}
+
+
+
+
+
+################################ PUNTO ALIASES #################################
+
+dotfiles_specific_aliases() \
+{
+	alias syncFiles='cd "$PUNTO_SH" && ./sync.sh dotfiles --files; cd -'
+	alias syncEditors='cd "$PUNTO_SH" && ./sync.sh txtedit --full; cd -'
+	alias syncFullSublime='cd "$PUNTO_SH" && ./sync.sh txtedit --full sublime; cd -'
+	alias syncFullVscode='cd "$PUNTO_SH" && ./sync.sh txtedit --full vscode; cd -'
+
+	alias syncMonokai="ln -fsv \"$DOTFILES/home/config/sublime-text/Packages/User/Color Scheme - Default/Monokai.sublime-color-scheme\" \"$HOME/Library/Application Support/Sublime Text/Packages/User/Color Scheme - Default/\""
+
+	alias find-bin='cd "$PUNTO_SH"/scripts/tools; ./test.sh find-bin; cd -'
+
+	alias testColors='cd "$PUNTO_SH"/scripts/tools && ./colors.sh; cd -'
+	alias gatekeepr='cd "$PUNTO_SH"/scripts/tools && ./gatekeeper.sh; cd -'
+	alias gatekeepr2='cd "$PUNTO_SH"/scripts/tools && ./gatekeeper2.sh; cd -'
+	alias catGatekeep='cd "$PUNTO_SH"/scripts/tools && cat ./gatekeeper.sh; cd -'
+}
+
+
+
+
+
+################################# DEV ALIASES ##################################
+
+network_aliases() \
+{
+	alias localip="ipconfig getifaddr en0"
+
+	alias ipAddress='ifconfig | ag "inet " | ag -v 127.0.0.1'
+	# alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
+	alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[0-9]\+\)\|[a-fA-F0-9:]\+\)' | awk '{ sub(/inet6? (addr:)? ?/, \"\"); print }'"
+
+	## Show active network interfaces
+	alias ifactive="ifconfig | pcregrep -M -o '^[^\t:]+:([^\n]|\n\t)*status: active'"
+
+	alias pingArch='ping -c 3 archlinux.org'
+	alias pingTest='ping -c 3 *.test'
+	alias digTest='dig *.test @127.0.0.1'
+}
+
+localhost_aliases() \
+{
+	alias localhost='sudo apachectl start && mysql.server start'
+	alias restartLocalhost='sudo apachectl -k restart && mysql.server restart'
+	alias statusLocalhost='printf "\033[0;31mApache status:\033[0m"; ps aux | ag [h]ttpd && netstat -at | ag [L]ISTEN | grep *.http; printf "\n\033[0;34mMySQL status:\033[0m"; ps aux | ag [m]ysql && lsof -i:3306 | ag [m]ysql'
+
+	### Apache aliases
+	 alias testApache='apachectl configtest'
+	 alias settingsApache='printf "\033[0;31mApache Vhosts/Run Settings:\033[0m"; apachectl -S; printf "\n\033[0;31mApache Compile Settings:\033[0m"; apachectl -V; echo'
+	 alias whereApacheConf='apachectl -V | ag SERVER_CONFIG_FILE'
+	 alias statusApache='ps aux | ag [h]ttpd && netstat -at | ag [L]ISTEN | grep *.http'
+
+	### MySQL aliases
+	 alias sockMysql='sudo rm -f /tmp/mysql.sock && sudo ln -fsv /usr/local/var/run/mysql/mysql.sock /tmp/mysql.sock'
+	 alias statusMysql='ps aux | ag [m]ysql && lsof -i:3306 | ag [m]ysql'
+}
+
+dev_aliases() \
+{
+	alias aliasesgit='less "$HOME"/.opt/oh-my-zsh/plugins/git/git.plugin.zsh'
+	alias galiases='git config --get-regexp alias'
+	alias gammend='git commit --amend '
+	alias glogv='git log --stat'
+	alias gundoS='git reset --soft HEAD~1'
+	alias gundo='git reset HEAD~1'
+	alias guntrack='git update-index --assume-unchanged '
+	alias greup='"!f(){ git remote add upstream $1};f"'
+	alias greupGH='"!f(){ git remote add upstream https://github.com/$1/$2.git;};f"'
+	alias greorg='"!f(){ git remote set-url origin $1};f"'
+	alias greorgGH='"!f(){ git remote set-url origin https://github.com/$1/$2.git;};f"'
+
+	alias aliasesnpm='less "$SHELL_HOME/plugins/npm_custom.plugin.zsh'
+	alias realiasnpm='. "$SHELL_HOME/plugins/npm_custom.plugin.zsh'
+	alias updatenpm='npm install -g npm'
+	alias nodeVersions='printf "\033[0;32mNodeJS Version:\033[0m"; node -v; printf "\033[0;32mNode Version Manager version:\033[0m"; nvm --version; printf "\033[0;32mNode Package Manager version:\033[0m"; npm -v'
+
+	alias pipenvRunServer='pipenv run python manage.py runserver'
+
+	alias slimSkel='composer create-project slim/slim-skeleton --prefer-dist '
+	alias slimSkel318='composer create-project slim/slim-skeleton=3.1.8 --prefer-dist '
+	alias mySlimRest='composer create-project dievilz/slim4-rest-api-boilerplate --repository=https://github.com/dievilz/slim4-rest-api-boilerplate '
+}
+
+
+
+
+
+################################ OTHER ALIASES #################################
+
+colors_aliases() \
+{
+	colors="for code ({000..255}) print -P -- "
+	colors=${colors}'"$code: %F{$code}This is how your text would look like%f"'
+
+	alias echo256colors="echo '$colors'"
+	alias 256colors="$colors"
+
+	alias 16colors='printf "\033[0;30mblack      \033[0;90mb black\n\033[0;31mred        \033[0;91mb red\n\033[0;32mgreen      \033[0;92mb green\n\033[0;33myellow     \033[0;93mb yellow\n\033[0;34mblue       \033[0;94mb blue\n\033[0;35mmagenta    \033[0;95mb magenta\n\033[0;36mcyan       \033[0;96mb cyan\n\033[0;37mwhite      \033[0;97mb white\n"'
+
+	alias 16colorsNewl='printf "\033[0;30mblack\n\033[0;31mred\n\033[0;32mgreen\n\033[0;33myellow\n\033[0;34mblue\n\033[0;35mmagenta\n\033[0;36mcyan\n\033[0;37mwhite\n\033[0;90mb black\n\033[0;91mb red\n\033[0;92mb green\n\033[0;93mb yellow\n\033[0;94mb blue\n\033[0;95mb magenta\n\033[0;96mb cyan\n\033[0;97mb white\n"'
+}
+
+
+##### Print useful info with bold and normal text
+notes_aliases() \
+{
+	alias notesAl='printf "
+\033[1mexa variations:\033[0m Exa
+\033[1mless values:\033[0m Less
+\033[1mvim commands:\033[0m Vim
+\033[1memacs commands:\033[0m Emax
+\033[1mtmux commands:\033[0m Tmux
+\033[1mShells versions:\033[0m Shells
+\033[1mPermissions quick guide:\033[0m Perms
+\033[1mCommon permisssions list:\033[0m CommonP
+"'
+
+	alias Exa=' printf "%b" "
+\033[1mcomplete command|aliases                 |definition  |description\033[0m
+exa -l          |\033[1mexal      \033[0m|exa -l      |A much better version than original <ls -al>
+exa -T -L ?     |\033[1mexaT <n>  \033[0m|exa -T -L ? |A much better version than original  <tree>
+exa -l -T -L ?  |\033[1mexalT <n> \033[0m|exal -T -L ?|Like exaT, but with -l by default
+exa -T -L 1     |\033[1mexaT1     \033[0m|exaT 1      |You can make these 2 aliases to display...
+exa -T -L 2     |\033[1mexaT2     \033[0m|exaT 2      |long details by just adding -l at the end...
+exa -l -T -L 1  |\033[1mexalT1    \033[0m|exalT 1     |but what a drag, so, why not just adding...
+exa -l -T -L 2  |\033[1mexalT2    \033[0m|exalT 2     |it to the aliases then? ¯\_(ツ)_/¯
+"'
+
+	alias Less='printf "
+\033[1mGit Pager:\033[0m ${GIT_PAGER}
+\033[1mBat Pager:\033[0m ${BAT_PAGER}
+\033[1mPager:\033[0m ${PAGER}
+\033[1mLess:\033[0m ${LESS}
+\033[1mMore:\033[0m ${MORE}
+
+\033[1mGo BoF:\033[0m g
+\033[1mGo EoF:\033[0m G
+\033[1mFind in File:\033[0m
+Type /, and then type the string you want to find. Once you found
+the string, press n to Find Next, press N to Find Previous
+"'
+
+	alias Vim='printf "
+\033[1mUndo:\033[0m u
+\033[1mGo BoF:\033[0m gg, :1, 1G or 1gg
+\033[1mGo EoF:\033[0m :<percentage_char>, Ctrl+End
+\033[1mGo Line#:\033[0m :<#>, i.e. :27
+
+\033[1mDelete from Current Line to EoF:\033[0m :.,<dolar_char>d, or :<Line#>,<dolar_char>d
+"'
+
+	alias Emax='printf "
+\033[1mC:\033[0m Control
+\033[1mM:\033[0m Left Alt
+\033[1ms:\033[0m Super
+\033[1mQuit:\033[0m C+x C+c
+\033[1mClose Buffer (not Emacs):\033[0m C+x k
+"'
+
+	alias Tmux='printf "
+\033[1mHelp:\033[0m Prefix + ?
+\033[1mPage Up/Down:\033[0m  Prefix + [ (Arrow Up/Down or PgUp/Down)
+\033[1mSplit Pane Hz:\033[0m Prefix + "
+\033[1mSplit Pane Vr:\033[0m Prefix + %
+\033[1mClose Pane:\033[0m Prefix + X
+\033[1mChange to Panes:\033[0m Prefix + Arrows/HJKL
+\033[1mQuit:\033[0m          Prefix + ; + "kill-session"
+"'
+
+	alias Shells='printf "
+\033[1msh - Bourne Shell\033[0m\n"; readlink /var/select/sh;
+printf "\n\033[1mksh - Korn Shell\033[0m\n "; env ksh --version;
+printf "\n\033[1mbash - Bourne-Again Shell\033[0m\n "; env bash --version;
+printf "\n\033[1mzsh - Z Shell\033[0m\n "; env zsh --version; echo'
+
+	filedirPV='
+\033[1mAccess Permissions (Letter|Octal - Examples):\033[0m
+\033[1m Read (See/List):\033[0m         r | 4 - (cat fl,   ls dir)
+\033[1m Write (Create):\033[0m          w | 2 - (touch fl, mkdir dir)
+\033[1m       (Remove):\033[0m                  (rm fl,    rmdir dir)
+\033[1m Execute (Run/Traverse):\033[0m  x | 1 - (./ fl,    cd dir)
+--------------------------------------------
+\033[1m*\033[0m Default perms for files:   644 rw- r-- r--
+\033[1m*\033[0m Default perms for folders: 755 rwx r-x r-x
+
+\033[1mLetter Operators:\033[0m
+\033[1m+:\033[0m Add perm
+\033[1m-:\033[0m Remove perm
+\033[1m=:\033[0m Set perm
+
+\033[1mClasses (Letter|Octal):\033[0m
+\033[1mUser:\033[0m  -rwx------- | #--
+\033[1mGroup:\033[0m ----rwx---- | -#-
+\033[1mOther:\033[0m -------rwx- | --#
+'
+	commonPerms='
+\033[1mCommon Permissions\033[0m
+
+\033[1mServer/Web\033[0m
+\033[1m755\033[0m: rwx r-x r-x | Dirs with dir-listing and uploads folder for admin
+\033[1m711\033[0m: rwx --x --x | Rest of the dirs: Admin needs <rwx>; Clients should only execute files
+
+\033[1mConsumer/Personal\033[0m
+\033[1m744\033[0m: rwx r-- r-- | Make a file executable, like a shell script
+\033[1m644\033[0m: rw- r-- r-- | Rest of files: U can <rw> but not <x> since files may not need to be executables
+\033[1m555\033[0m: r-x r-x r-x | Make a folder non-writable, to prevent apps from create or remove anything inside
+
+\033[1mMisc.\033[0m
+\033[1m551\033[0m: r-x r-x --x | /home/<folders>: Based "Defending $HOME", 751 if need writable perms
+\033[1m700\033[0m: rwx --- --- | /home/<username>/<folders>: Protect folders from everyone
+\033[1m755\033[0m: rwx r-x r-x | /home/<username>/{Sites,Public]: For everyone
+\033[1m222\033[0m: -w- -w- -w- | Original "Defending $HOME", which is stoopid
+
+----------------------------------------
+r (Read/See/List)    | 4 - (cat fl,   ls dir)
+w (Write, Create     | 2 - (touch fl, mkdir dir)
+   ...or Remove)     |  `- (rm fl,    rmdir dir)
+x (Execute/Traverse) | 1 - (./ fl,    cd dir)
+'
+	alias Perms='printf $filedirPV; echo; printf $commonPerms'
+	alias CommonP='printf $commonPerms'
+}
+
+
+
+
+# ------------------------------------------------------------------------------
+
+usage_aliases() \
+{
+	echo
+	echo "Aliases Sourcing Script"
+	printf "SYNOPSIS: ./%s [options][-h]\n" "$(basename "$0")"
+	cat <<-'EOF'
+
+	OPTIONS:
+	    essential             Essential aliases for basic terminal usage
+	    startup               Sourcing of Shell startup files
+	    alt, altered          Default bare command operation to use additional options
+	    sys-shortnd           System commands shorter and easier to remember
+	    3py-shortnd           3rd party commands shorter and easier to remember
+	    funct, functions      Aliases for my custom scripts/functions
+	    variants              Same aliases, different OS variants of the same command
+	    macos                 macOS-only aliases
+	    linux                 Linux-only aliases
+	    quick, quick-access   Quick access aliases for important dirs
+	    shell-debug           Same aliases, different debugging commands depending on the $SHELL
+	    dots                  Custom aliases for my dotfiles
+	    network               Custom aliases for my network stuff
+	    localhost             Custom aliases for my localhost stuff
+	    dev                   Custom aliases for my dev stuff
+	    colors                For testing color compatibility
+	    notes                 Print useful info with bold and normal text
+
+	    -h,--help    Show this menu
+
+	Without any arguments, all aspects will be setup (in the above order)
+
+	EOF
+}
+
+main_aliases() \
+{
+	case $1 in
+		"-h"|"--help")
+			usage_aliases
+			return 0
+		;;
+		"essential")
+			echo "Sourcing essential..."; essential_aliases
+		;;
+		"startup")
+			echo "Sourcing startup..."; startup_aliases
+		;;
+		"alt"|"altered")
+			echo "Sourcing altered..."; altered_commands_aliases
+		;;
+		"sys-shortnd")
+			echo "Sourcing system-shortened..."; shortened_system_aliases
+		;;
+		"3py-shortnd")
+			echo "Sourcing 3rdparty-shortened..."; shortened_3rdparty_aliases
+		;;
+		"funct"|"functions")
+			echo "Sourcing functions..."; custom_functions_aliases
+		;;
+		"variants")
+			echo "Sourcing variants..."; os_variants_aliases
+		;;
+		"macos")
+			echo "Sourcing macos-only..."; macos_specific_aliases
+		;;
+		"linux")
+			echo "Sourcing linux-only..."; linux_specific_aliases
+		;;
+		"quick"|"quick-access")
+			echo "Sourcing quick-access..."; quick_access_aliases
+		;;
+		"shell-debug")
+			echo "Sourcing shell-debug..."; shell_debug_aliases
+		;;
+		"dots")
+			echo "Sourcing dots..."; dotfiles_specific_aliases
+		;;
+		"network")
+			echo "Sourcing network..."; network_aliases
+		;;
+		"localhost")
+			echo "Sourcing localhost..."; localhost_aliases
+		;;
+		"dev")
+			echo "Sourcing dev..."; dev_aliases
+		;;
+		"colors")
+			echo "Sourcing colors..."; colors_aliases
+		;;
+		"notes")
+			notes_aliases
+		;;
+		"")
+			essential_aliases
+			startup_aliases
+			altered_commands_aliases
+			shortened_system_aliases
+			shortened_3rdparty_aliases
+			custom_functions_aliases
+			os_variants_aliases
+			macos_specific_aliases
+			linux_specific_aliases
+			quick_access_aliases
+			shell_debug_aliases
+			dotfiles_specific_aliases
+			network_aliases
+			localhost_aliases
+			dev_aliases
+			colors_aliases
+			notes_aliases
+
+			echo "Sourced: ~/.aliases"
+		;;
+		*)
+			usage_aliases
+			return 127
+		;;
+	esac
+}
+
+main_aliases "$@"

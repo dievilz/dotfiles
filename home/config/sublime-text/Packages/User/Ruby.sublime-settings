@@ -1,0 +1,12 @@
+{
+	"extensions":
+	[
+		"Brewfile",
+		"Caskfile",
+		"Caskfile_fonts",
+		"Tapfile",
+		"Kegfile",
+		"Masfile",
+		"Masfile_macos11"
+	]
+}

@@ -1,0 +1,71 @@
+#
+# ~/.config/ssh/ssh_config
+#
+
+################################################################################
+
+### Personal configs
+
+## dievilz' GitHub:
+Host dievilzGH github.com
+    User git
+    HostName github.com
+    ControlMaster no
+    IdentitiesOnly yes
+    PreferredAuthentications publickey
+    IdentityFile ~/.local/share/ssh/id_ed25519_dievilz_github.pk
+    MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com
+
+
+################################################################################
+
+#
+# https://github.com/drduh/config/blob/master/ssh_config
+# https://linux.die.net/man/5/ssh_config
+#
+
+# Host router
+#  IdentityFile ~/.local/share/ssh/router
+#  HostName 192.168.1.1
+#  Port 2222
+#  User sysadm
+#  ControlMaster auto
+#  ControlPath ~/.local/share/ssh/master-%r@%h:%p
+#  ControlPersist 300
+
+# Host gitlab.com
+#   User git
+#   ControlMaster no
+#   IdentitiesOnly yes
+#   IdentityFile ~/.local/share/ssh/gitlab
+
+# Host github.com
+#   User git
+#   ControlMaster no
+#   IdentitiesOnly yes
+#   IdentityFile ~/.local/share/ssh/github
+#   MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com
+
+Host *
+  AddKeysToAgent yes
+  UseKeychain yes
+  # ControlMaster auto
+  # ControlPath ~/.local/share/ssh/master-%r@%h:%p
+  # ControlPersist 300
+  UserKnownHostsFile ~/.config/ssh/known_hosts
+  AddressFamily inet
+  HashKnownHosts yes
+  VisualHostKey yes
+  PasswordAuthentication no
+  ChallengeResponseAuthentication no
+  StrictHostKeyChecking ask
+  VerifyHostKeyDNS yes
+  ForwardAgent no
+  ForwardX11 no
+  ForwardX11Trusted no
+  ServerAliveInterval 300
+  ServerAliveCountMax 2
+  Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com
+  MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com
+  KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
+  HostKeyAlgorithms ssh-ed25519-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com,ssh-ed25519,ssh-rsa

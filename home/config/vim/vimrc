@@ -1,0 +1,253 @@
+"###############################################################################
+"
+" ~/.config/vim/vimrc
+"
+" @dievilz' Vim configuration file
+"
+" Based on the following configs:
+" https://github.com/skwp/dotfiles/blob/master/vimrc
+" https://github.com/victormours/dotfiles/blob/master/vim/vimrc
+" https://github.com/justinmk/config/blob/master/.vimrc
+" https://github.com/mhinz/vim-galore/blob/master/static/minimal-vimrc.vim
+" https://github.com/amix/vimrc/blob/master/vimrcs/basic.vim
+"
+"###############################################################################
+
+
+scriptencoding utf-8
+
+
+" ################################ SETTINGS ####################################
+
+"# --------------> https://github.com/victormours/dotfiles/blob/master/vim/vimrc
+"# Use Vim settings, rather than Vi settings (much better!).
+"# This must be first, because it changes other options as a side effect.
+set nocompatible
+" set nocp
+
+"# ----------------------> https://github.com/justinmk/config/blob/master/.vimrc
+if has('vim_starting')
+	set encoding=utf-8 "Required for alt/meta mappings  @tpope/vim-sensible/issues/69
+	set langmenu=en
+	set ffs=unix       "Use Unix as the standard file type
+endif
+
+
+" ========================= XDG SUPPORT ========================================
+"# ----------------------------------------------> https://blog.joren.ga/vim-xdg
+
+if empty($MYVIMRC)         | let $MYVIMRC = expand('<sfile>:p')           | endif
+if empty($XDG_CACHE_HOME)  | let $XDG_CACHE_HOME  = $HOME."/.cache"       | endif
+if empty($XDG_CONFIG_HOME) | let $XDG_CONFIG_HOME = $HOME."/.config"      | endif
+if empty($XDG_DATA_HOME)   | let $XDG_DATA_HOME   = $HOME."/.local/share" | endif
+
+set runtimepath^=$XDG_CONFIG_HOME/vim
+set runtimepath+=$XDG_DATA_HOME/vim
+set runtimepath+=$XDG_CONFIG_HOME/vim/after
+
+set packpath^=$XDG_DATA_HOME/vim,$XDG_CONFIG_HOME/vim
+set packpath+=$XDG_CONFIG_HOME/vim/after,$XDG_DATA_HOME/vim/after
+
+let g:netrw_home = $XDG_DATA_HOME."/vim"
+
+call mkdir($XDG_DATA_HOME."/vim/spell", 'p')
+set viewdir=$XDG_DATA_HOME/vim/view | call mkdir(&viewdir, 'p')
+
+set backupdir=$XDG_CACHE_HOME/vim/backup | call mkdir(&backupdir, 'p')
+set directory=$XDG_CACHE_HOME/vim/swap   | call mkdir(&directory, 'p')
+set undodir=$XDG_CACHE_HOME/vim/undo     | call mkdir(&undodir,   'p')
+
+if !has('nvim') " Neovim has its own location which already complies with XDG specification
+  set viminfofile=$XDG_CACHE_HOME/vim/viminfo
+endif
+
+" ==============================================================================
+
+
+" ========================== MAPLEADER =========================================
+"# With a map leader it's possible to do extra key combinations. The mapleader
+"# has to be set before the Plugin Manager starts loading all the plugins.
+
+"# Change Leader to a comma because the backslash is too far away
+"# That means all \x commands turn into ,x
+"# -------------------------> https://github.com/skwp/dotfiles/blob/master/vimrc
+let g:mapleader=","    "\<Space>
+
+" nmap <Leader>rxm :ExtractMethod<Enter>
+" ==============================================================================
+
+
+" =========================== GENERAL ==========================================
+"# --------------> https://github.com/victormours/dotfiles/blob/master/vim/vimrc
+
+set history=1000                    "Store lots of :cmdline history
+set showcmd                         "Show incomplete cmds down the bottom
+set showmode                        "Show current mode down the bottom
+" set gcr=a:blinkon0                  "Disable cursor blink
+set noerrorbells                    "No annoying sound on errors
+set visualbell                      "No sounds
+" set novisualbell
+set autoread                        "Reload files changed outside vim
+
+"# This makes Vim act like all other editors, buffers can
+"# exist in the background without being in a window.
+"# http://items.sjbach.com/319/configuring-vim-right
+" This is Vim’s way of saying you can’t open a new buffer
+" (and hide this one) without first writing it
+set hidden
+
+" ==============================================================================
+
+
+" ===================== FILETYPES & SYNTAX =====================================
+syntax on                           "Turn on syntax highlighting
+colorscheme desert       " greyed
+
+" Run :filetype (without args) to see what you may have
+" to turn on yourself, or just set them all to be sure.
+let s:plugins = filereadable(expand("~/.local/share/vim/autoload/plug.vim", 1))
+if !s:plugins
+	if has('syntax') && !exists('g:syntax_on')
+		syntax enable
+	endif
+	filetype plugin indent on
+endif
+
+"# -----------------> https://github.com/amix/vimrc/blob/master/vimrcs/basic.vim
+"# Set extra options when running in GUI mode
+if has("gui_running")
+	set guioptions-=T
+	set guioptions-=e
+	set t_Co=256             "Tell the term has 256 colors
+	set guitablabel=%M\ %t
+endif
+" ==============================================================================
+
+
+" ========================== INTERFACE =========================================
+set mouse=a       "Enable mouse usage (all modes)
+set number        "Show line numbers
+set cursorline    "Show cursor line
+set title         "Set the terminal title
+set ruler         "Show the line and column number of the cursor position
+set statusline+=%F
+set backspace=indent,eol,start      "Intuitive backspacing in insert mode
+set whichwrap+=<,>,h,l
+
+set ignorecase    "Ignore case when searching...
+set smartcase     "...unless we type a capital
+
+set hlsearch      "Highlight search results...
+set incsearch     "...dynamically as they are typed.
+
+"# If the search term highlighting gets annoying, set a key to switch it off
+"# temporarily:
+nmap <silent> <leader>n :silent :nohlsearch<CR>
+
+"# Switch to show invisibles
+"# May affect performance: @tpope/vim-sensible/issues/57
+set list listchars=tab:→\ ,eol:↲,space:·,trail:⎵"\,trail:~,extends:>,precedes:<
+
+set magic         "For regular expressions turn magic on
+set showmatch     "Show matching brackets when text indicator is over them
+" set mat=2         "How many tenths of a second to blink when matching brackets
+
+"# Make file/command completion useful
+set wildmenu
+set wildmode=list:longest,full
+
+"# Ignore compiled files
+set wildignore=*.o,*~,*.pyc
+if has("win16") || has("win32")
+	set wildignore+=.git\*,.hg\*,.svn\*
+else
+	set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
+endif
+
+"# Properly disable sound on errors on MacVim
+if has("gui_macvim")
+	autocmd GUIEnter * set vb t_vb=
+endif
+
+set laststatus=2         "Always show the status line
+set foldcolumn=1         "Add a bit extra margin to the left
+set cmdheight=2          "Height of the command bar
+set scrolloff=5          "Keep 5 lines below and above the cursor when scrolling
+set shortmess=atI        "Shorten command-line text and other info tokens
+set termguicolors
+" ==============================================================================
+
+
+" ========================= INDENTATION ========================================
+set autoindent   "Indent a new line the same amount as the line above/just typed
+" set smartindent  "Deprecated by 'cindent' and 'indentexpr'
+
+set noexpandtab  "Use   T A B S
+" set expandtab    "Use  S P A C E S
+
+nnoremap <S-Tab> <C-V><Tab>   "Use Shift-Tab to insert a Real Tab on INSERT mode
+
+set smarttab
+set shiftwidth=4   "Width for autoindents
+set tabstop=4      "Number of columns occupied by a tab character
+set softtabstop=4  "See multiple spaces as tabstops so <BS> does the right thing
+
+set linebreak      "Wrap lines at convenient points
+set complete-=i    "Don't scan includes (tags file is more performant)
+
+"# Auto indent pasted text
+nnoremap p p=`]<C-o>
+nnoremap P P=`]<C-o>
+
+" ================ FOLDS ============================
+set foldmethod=indent   "Fold based on indent
+set foldnestmax=3       "Deepest fold is 3 levels
+set nofoldenable        "Don't fold by default
+" ==============================================================================
+
+
+" ========================= VISUAL MODE ========================================
+"# Visual mode pressing * or # searches for the current selection
+"# Super useful! From an idea by Michael Naumann
+vnoremap <silent> * :<C-u>call VisualSelection('', '')<CR>/<C-R>=@/<CR><CR>
+vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
+" ==============================================================================
+
+
+" ======================= PERSISTENT UNDO ======================================
+"# -------------------------> https://github.com/skwp/dotfiles/blob/master/vimrc
+"# Keep undo history across sessions, by storing in file.
+"# Only works all the time.
+if has('persistent_undo') && isdirectory(expand('~').'/.local/share/vim/backups')
+	silent !mkdir ~/.var/cache/vim/backups >/dev/null 2>&1
+	set undodir=~/.var/cache/vim/backups
+	set undofile
+endif
+" ==============================================================================
+
+
+" ##############################################################################
+
+
+
+
+
+" ############################## KEY MAPPINGS ##################################
+
+"# Remap <`> to <'>
+" nnoremap ' `
+" nnoremap ` '
+
+"# The following mappings in your vimrc provide a quick way to move lines of text
+"# up or down. The mappings work in normal, insert and visual modes, allowing you
+"# to move the current line, or a selected block of lines.
+nnoremap <S-C-Up> :m .-2<CR>==
+nnoremap <S-C-Down> :m .+1<CR>==
+inoremap <S-C-Up> <Esc>:m .-2<CR>==gi
+inoremap <S-C-Down> <Esc>:m .+1<CR>==gi
+vnoremap <S-C-Up> :m '<-2<CR>gv=gv
+vnoremap <S-C-Down> :m '>+1<CR>gv=gv
+
+" ##############################################################################
+
+" echo "Sourced: vimrc"

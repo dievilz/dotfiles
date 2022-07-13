@@ -1,0 +1,183 @@
+
+
+# 50 chars:  ------------------------------------>
+# 72 chars:  ---------------------------------------------------------->
+
+# When describing the subject line, use these sentences below as a guide:
+# * "After this commit, the application will    <your_subject_line_here>"
+# *   “After this commit, the code/file will    <your_subject_line_here>”
+# *            "If applied, this commit will    <your_subject_line_here>"
+
+# @dievilz Custom Git Commit Message Guidelines
+# (Forked from https://gist.github.com/abravalheri/34aeb7b18d61392251a2)
+#
+# This is the structure/format for a commit message:
+# <type>(<scope>): <subject>   #<meta>      F
+# ----------- blank line -------------        O
+# <body>                                        R
+# ----------- blank line -------------            M
+# <footer>                                          A
+# --------- last line (end of message)                T
+
+# <---------------------- <___1.TYPE (mandatory)____> ------------------------->
+# The <type> of a commit message should be a single word or abbreviation drawn
+# from an ontology, according to the nature of the project. This document
+# specifies a programming ontology, with the following elements:
+#
+#  * blob:     A newly created file. Better when just creating an empty file
+#              rather than an almost finished file. May include #wip metatag.
+#              Can be used when changing file permissions too.
+#  * tree:     Like above, but for directories. May include #wip metatag.
+#              Can be used when changing dir permissions too.
+#  * feat:     A new feature
+#  * fix:      A bug fix
+#  * docs:     Documentation-only changes
+#  * style:    Text changes that do not affect the meaning of the code (white-spaces,
+#              formatting, missing semi-colons, typos, etc)
+#  * refactor: Code changes that improves readability/performance (neither fixes
+#              a bug nor adds a feature).
+#  * test:     Adding missing tests or correcting existing ones
+#  * build:    Changes to the build/compilation/packaging process or auxiliary
+#              tools such as documentation generation or external dependencies
+#  * ci/cd:    Changes in the continuous integration/delivery setup, files, scripts
+#  * notice:   Changes to announce/warn anything related to: files, code blocks, etc.
+#  * revert:   If the commit reverts a previous commit, it should begin with
+#              "revert:", followed by the subject of the reverted commit. In the
+#              body it should say: "This reverts commit <hash>.", where the hash
+#              is the SHA of the commit being reverted and explain the reason(s),
+#              and footer say: "Reverts <hash>".
+#              Example:
+#                 revert: include more details in command-line help text:
+#                 ---------- blank line -----------
+#                 This reverts commit 5b233b5a
+#                 ---------- blank line -----------
+#                 Reverts 5b233b5a
+#
+#  * META example tags: #wip, #irrelevant, #style
+
+# <---------------------- <___2.SCOPE (optional)___> -------------------------->
+# Usually it is convenient to mention exactly which part of the code base changed.
+# The <scope> token is responsible for providing that information. While the
+# granularity of the scope can vary, it is important for it to be a part of the
+# "common language" spoken in the project.
+# Please notice that in some cases the scope is naturally too broad, and
+# therefore not worthy to mention. <TYPE> and <SCOPE> may be mutually exclusive
+#
+# Example: feat(auth): introduce sign in via GitHub
+
+# <--------------------- <___3.SUBJECT (mandatory)___> ------------------------>
+# The subject line should contain a succinct description of the change(s).
+#
+#  * Soft limit: 50 chars. Hard limit: 72 chars.
+#  * Use the infinitive tense to mainly describe the behavior of the program
+#    after the commit, i.e. “change”. Avoid describe your _coding behavior_.
+#  * May be prefixed for CI/CD purposes.
+#  * Do not capitalize the subject line. (Non-standard)
+#  * Do not end the subject line with a period.
+#
+# Example: refactor: move folder structure to `src` directory layout
+
+# <---------------------- <____4.META (optional)____> ------------------------->
+# The end of subject-line may contain hashtags to facilitate changelog generation
+# and bissecting:
+#
+#  * #wip - the feature being implemented is not complete yet. Should not be
+#           included in changelogs (just the last commit for a feature goes to
+#           the changelog).
+#
+#  * #irrelevant - the commit does not add useful information. Used when fixing
+#                  typos, etc. Should not be included in changelogs.
+#
+# Example: blob: add TO-DO markdown file #wip #irrelevant
+
+# <---------------------- <___5.BODY (mandatory)____> ------------------------->
+# Includes motivation for the change and contrasts with previous behavior in
+# order to illustrate the impact of the change.
+#
+#  * Soft limit: 72 chars. Hard limit: 100 chars.
+#  * Use infinitive, present tense: “change”, not “changed” nor “changes”
+#  * Use the body to explain _What_ and _Why_, not _How_.
+#     • Why you made the change in the first place —the way things worked before
+#       the change (and what was wrong with that), the way they work now, and
+#       why you decided to solve it the way you did.
+#       (See https://chris.beams.io/posts/git-commit/#why-not-how)
+#  * Keep it Simple, Future-proof, Junior-dev friendly.
+#
+#  * Markup syntax as Markdown can be applied here.
+#     • For simple headers, type a space, then use H5 and H6: ##### <Header>
+#
+#  * You may explain the same changes in 4 different perspectives (optional):
+#     • From the user’s perspective: A description of how a user would see
+#       incorrect program behavior, steps to reproduce a bug, user goals that
+#       the commit is addressing, what they can see, who is affected.
+#     • From a manager’s perspective: Design choices, your creativity, why
+#       you made the changes.
+#     • From the code’s perspective: A line-by-line, function-by-function, or
+#       file-by-file summary.
+#     • From git’s perspective: Any related commits in this or another repository,
+#       especially if you are reverting earlier changes; related GitHub issues.
+#  (See https://medium.com/@joshuatauberer/write-joyous-git-commit-messages-2f98891114c4)
+#
+# Example:
+# feat($browser): add onUrlChange event (popstate/hashchange/polling)
+#
+# ##### New $browser event:
+#  - forward popstate event if available
+#  - forward hashchange event if popstate not available
+#  - do polling when neither popstate nor hashchange available
+#
+# Breaks $browser.onHashChange, which was removed (use onUrlChange instead)
+
+# <---------------------- <___6.FOOTER (optional)___> ------------------------->
+#  * All breaking changes or deprecations have to be mentioned in footer with the
+#    description of the change, justification and migration notes.
+#    Example:
+#      Breaks $browser.onHashChange, which was removed (use onUrlChange instead)
+#
+#  * Referencing issues: closed bugs should be listed on a separate line in the
+#    footer prefixed with "Closes" keyword.
+#    Example:
+#      Closes #123
+#      Closes #123, #245, #992
+
+# <------------------ <___7.GENERATING "CHANGELOG.md"___> --------------------->
+# Changelogs may contain three sections: new features, bug fixes, breaking
+# changes. This list could be generated by script when doing a release, along
+# with links to related commits. Of course you can edit this change log before
+# actual release, but it could generate the skeleton.
+#
+#  * List of all subjects (first lines in commit message) since last release:
+#       git log <last tag> HEAD --pretty=format:%s
+#
+#  * New features in this release:
+#       git log <last release> HEAD --grep feat
+#
+# Thanks to @stephenparish for the original text:
+# (https://gist.github.com/stephenparish/9941e89d80e2bc58a153)
+#
+################################################################################
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch master
+#
+# Initial commit
+#
+# Changes to be committed:
+#	new file:   .editorconfig
+#	new file:   .gitignore
+#	new file:   .gitmodules
+#	new file:   LICENSE
+#	new file:   README.md
+#
+# Untracked files:
+#	defaults_macos.sh
+#	docs/
+#	git.sh
+#	helpers.sh
+#	home/
+#	root/
+#	rsync.sh
+#	sync.sh
+#

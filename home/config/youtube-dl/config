@@ -1,0 +1,85 @@
+#
+# youtube-dl configuration file
+#
+
+#### General Options
+## Abort downloading of further videos (in the playlist or the command line) if
+## an error occurs
+--abort-on-error
+
+
+
+#### Video Selection Options
+## Download only the video, if the URL refers to a video and a playlist.
+--no-playlist
+
+
+
+#### Download Options
+## Abort downloading when some fragment is not available
+--abort-on-unavailable-fragment
+
+##  Use the specified external downloader. Currently supports aria2c,avconv,axel
+## ,curl,ffmpeg,httpie,wget
+--external-downloader "axel"
+
+## Give these arguments to the external downloader
+--external-downloader-args "-n 10 -a"
+
+
+
+#### Filesystem Options
+## File containing URLs to download ('-' for stdin), one URL per line. Lines
+## starting with '#', ';' or ']' are considered as comments and ignored.
+# -a, --batch-file FILE
+
+## Save all videos under Downloads directory in your home directory
+--output ~/Downloads/%(title)s.%(ext)s
+
+## Do not resume partially downloaded files (restart from beginning)
+--no-continue
+
+## Do not use .part files - write directly into output file
+--no-part
+
+## Do not use the Last-modified header to set the file modification time
+--no-mtime
+
+## Write video description to a .description file
+--write-description
+
+
+
+#### Video Format Options
+# --format
+# --format bestvideo+bestaudio/best
+# --format bestvideo+bestaudio/bestvideo[ext=mp4]
+
+## If a merge is required (e.g. bestvideo+bestaudio), output to given container
+## format. One of mkv, mp4, ogg, webm, flv. Ignored if no merge is required
+# --merge-output-format FORMAT
+
+
+
+#### Authentication Options:
+## Login with this account ID
+# -u, --username USERNAME
+
+## Account password. If this option is left out, youtube-dl will ask interactively.
+# -p, --password PASSWORD
+
+## Two-factor authentication code
+# -2, --twofactor TWOFACTOR
+
+## Use .netrc authentication data
+# -n # --netrc
+
+
+
+#### Post-processing Options
+## Prefer ffmpeg over avconv for running the postprocessors (default)
+--prefer-ffmpeg
+
+## Location of the ffmpeg/avconv binary; either the path to the binary or its
+## containing directory.
+# --ffmpeg-location

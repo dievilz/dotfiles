@@ -1,0 +1,31 @@
+## OPUS to AAC
+opus2aac() {
+	while IFS= read -r -d '' name; do
+		ffmpeg -nostdin -i "$name" -c:a aac -b:a 160k -c:v copy "${name%.*}.aac";
+
+	done < <(find . -maxdepth 1 -name "*.opus" -type f -print0)
+}
+
+## MP4 to M4A
+mp4m4a() {
+	while IFS= read -r -d '' name; do
+		ffmpeg -nostdin -i "$name" -c:a m4a -vn -c:v copy "${name%.*}.m4a";
+
+	done < <(find . -maxdepth 1 -name "*.mp4" -type f -print0)
+}
+
+## HEVC to MP4
+hevc2mp4() {
+	while IFS= read -r -d '' name; do
+		ffmpeg -nostdin -i "$name" -map 0 -map 1:a -c copy "${name%.*}.mp4";
+
+	done < <(find . -maxdepth 1 -name "*.mov" -type f -print0)
+}
+
+## ANY to WEBP
+any2webp() {
+	while IFS= read -r -d '' name; do
+		cwebp -mt -q 50 -lossless "$name" -o "${name%.*}.webp";
+
+	done < <(find . -maxdepth 1 -name "*.webp" -type f -print0)
+}

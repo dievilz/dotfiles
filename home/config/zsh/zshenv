@@ -1,0 +1,49 @@
+#
+# $ZDOTDIR/.zshenv  OR  ~/.zshenv
+#
+
+## Printing for debugging purposes if session is interactive
+## If ZDOTDIR is not defined in /etc/zshenv, this file will never get sourced
+## because this file is not located at $HOME
+echo "Sourced: \$ZDOTDIR/.zshenv"
+
+## If ZSH is not defined (it SHOULDN'T be)...
+## ...Fallback to a series of possible default locations or quit.
+if [ -z "$ZSH" ];
+then
+	if [ -d /opt/zsh ]; then
+		export ZSH="/opt/zsh"
+
+	elif [ -d "$HOME/.opt/zsh" ]; then
+		export ZSH="$HOME/.opt/zsh"
+
+	elif [ -d "$HOME/.local/share/zsh" ]; then
+		export ZSH="$HOME/.local/share/zsh"
+
+	else
+		[ -t 1 ] && printf "\033[38;31mYou don't have a proper ZSH folder! " \
+		"Please make one at any location, export the location with 'export " \
+		"ZSH=</path/to/folder>' and invoke Zsh again\033[0m\n\n"
+	fi
+fi
+
+
+## If ZSH_LOCAL is not defined (it SHOULDN'T be)...
+## ...Fallback to a series of possible default locations or quit.
+if [ -z "$ZSH_LOCAL" ];
+then
+	if [[ -d /opt/**/share/zsh ]]; then
+		export ZSH_LOCAL="$(stat -f "%N" /opt/**/share/zsh)"
+
+	elif [ -d "/usr/share/zsh" ]; then
+		export ZSH_LOCAL="/usr/share/zsh"
+
+	elif [ -d "/usr/local/share/zsh" ]; then
+		export ZSH_LOCAL="/usr/local/share/zsh"
+
+	else
+		[ -t 1 ] && printf "\033[38;31mYou don't have a proper ZSH folder! " \
+		"Please make one at any location, export the location with 'export " \
+		"ZSH=</path/to/folder>' and invoke Zsh again\033[0m\n\n"
+	fi
+fi

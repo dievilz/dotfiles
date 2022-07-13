@@ -1,0 +1,36 @@
+#
+# ~/.config/shell/exports-macos-pkgin-optpkg
+#
+
+if ps -o args= -p $$ | grep -m 1 -Eq '(bash)';
+then
+	if [ -r /opt/pkg/share/bash-completion/bash_completion ];
+	then
+	. /opt/pkg/share/bash-completion/bash_completion
+	fi
+fi
+
+
+################################################################################
+
+## With any of the next packages, pkgin generates a common /gnu folder to
+## storage them all here. The following binaries don't need individual exports:
+## coreutils, findutils, gindent, gsed, gtar, !gnu-which, grep, m4, gmake,
+## bison, flex, libressl, file-formula and unzip.
+if [ -d "/opt/pkg/gnu/bin" ];
+then
+	[[ ! "$PATH" == */opt/pkg/gnu/bin:* ]] && export PATH="/opt/pkg/gnu/bin:$PATH"
+fi
+
+## To use man for GNU binaries, just prefix a 'g'
+if [ -d "/opt/pkg/gnu/share/man" ];
+then
+	if ! grep -Fqx "MANPATH /opt/pkg/gnu/share/man" /etc/manpaths.d/pkgsrc;
+	then
+		printf "%b" "\033[1mAdding Pkgin GNU man folder to /etc/manpaths.d/pkgsrc: \033[0m"
+		echo -e "MANPATH /opt/pkg/gnu/share/man\n" | sudo tee -a /etc/manpaths.d/pkgsrc >/dev/null 2>&1
+	fi
+fi
+
+
+echo "Sourced: exports-macos-pkgin-optpkg"

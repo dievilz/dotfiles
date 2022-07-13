@@ -1,0 +1,37 @@
+#
+# ~/.bash_profile
+#
+
+## Printing for debugging purposes
+echo "Sourced: ~/.bash_profile"
+
+
+## If Bash gets here, it means that the shell must be one of these options:
+## * local/remote login interactive shell
+## * local/remote login non-interactive shell
+##
+## And (because of my changes) both /etc/profile and /etc/bash.bashrc should
+## be sourced in any compatible OS even with a non-standard behaviour (like
+## macOS). But, this file doesn't contain the env vars we need, they are in
+## ~/.profile, so we need to verify if it has been somewhat sourced at this
+## point, if not, source it right away,
+
+if [ -z "$PROFILE_SOURCED" ];
+then
+	[ -r "$HOME/.profile" ] && . "$HOME/.profile"
+fi
+
+
+## ...but, a login interactive Bash shell incredibly doesn't source a ~/.bashrc
+## even if it's interactive (maybe because login interactive are used when there
+## isn't a GUI), so we need to source it if we are in macOS (because macOS use
+## login interactive shells even within the GUI).
+
+if [ "$(uname -s)" = "Darwin" ];
+then
+	# if [ "$SHELL_IS_LOGIN" = true ] && [ "$SHELL_IS_INTERACTIVE" = true ];
+	if shopt -q login_shell && [[ "$-" == *i* ]];
+	then
+		[ -n "$PS1" ] && . "$HOME/.bashrc"
+	fi
+fi

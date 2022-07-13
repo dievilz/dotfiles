@@ -1,0 +1,22 @@
+#
+# ~/.config/shell/exports-macos-homebrew-home
+#
+
+# ## Main Homebrew Packages
+# export MANPATH="/$HOME/.opt/homebrew/man:$MANPATH"
+# export INFOPATH="/$HOME/.opt/homebrew/info:$INFOPATH"
+
+# ################# USE PKGIN TO DOWNLOAD & EXPORT GNU BINARIES ##################
+
+# ################################################################################
+
+
+# ### Brew Kegs Exports
+# if [ -d "/$HOME/.opt/homebrew/openssl/bin" ]; then
+# 	[[ ! "$PATH" == */$HOME/.opt/homebrew/openssl/bin:* ]] \
+# 	&& export PATH="/$HOME/.opt/homebrew/openssl/bin:${PATH}"
+# fi
+# ###
+
+
+echo "Sourced: exports-macos-homebrew-home"

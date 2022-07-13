@@ -1,0 +1,36 @@
+{
+	"extensions":
+	[
+		"aliases",
+		"bash_login",
+		"bash_profile",
+		"bashrc",
+		"bashrc_Apple_Terminal",
+		"env",
+		"exports",
+		"exports-linux",
+		"exports-macos",
+		"exports-macos-fink-sw",
+		"exports-macos-homebrew-home",
+		"exports-macos-homebrew-opt",
+		"exports-macos-homebrew-usrlocal",
+		"exports-macos-pkgin-optpkg",
+		"exports-macos-ports-opt",
+		"exports-macos-ports-optlocal",
+		"ffmpeg",
+		"functions",
+		"fzf",
+		"lfrc",
+		"login",
+		"profile",
+		"ssh_config",
+		"sshd_config",
+		"zlogin",
+		"zprofile",
+		"zshenv",
+		"zshrc",
+		"zshrc_Apple_Terminal",
+		"zrc",
+		"zsh-theme"
+	]
+}

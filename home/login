@@ -1,0 +1,9 @@
+#
+# ~/.login
+#
+
+## Show your Message Of The Day
+# cat /private/etc/motd
+# fortune | cowsay | lolcat
+
+echo "Sourced: ~/.login\n"

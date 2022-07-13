@@ -1,0 +1,801 @@
+{
+  "version" : "2.0",
+  "renamerlet_data" : [
+    {
+      "name" : "Hard Rename",
+      "actions" : [
+        {
+          "identifier" : "find and replace",
+          "search_string" : "OPM__Psykos-1-",
+          "replace_string" : "OPM__Psykos-",
+          "file_part" : 0
+        },
+        {
+          "identifier" : "characters insert",
+          "insert_text" : "-1",
+          "insert_position" : 14,
+          "insert_side" : 0,
+          "file_part" : 0
+        }
+      ],
+      "icon_name" : "cubeItem"
+    },
+    {
+      "name" : "Repositioning Extensions 1 \"[\"",
+      "actions" : [
+        {
+          "identifier" : "regular expression",
+          "file_part" : 0
+        },
+        {
+          "identifier" : "find and replace",
+          "search_string" : ".png",
+          "replace_string" : "png",
+          "file_part" : 1
+        },
+        {
+          "identifier" : "find and replace",
+          "search_string" : ".jpg",
+          "replace_string" : "jpg",
+          "file_part" : 1
+        },
+        {
+          "identifier" : "find and replace",
+          "search_string" : "[",
+          "replace_string" : ".[",
+          "file_part" : 0
+        }
+      ],
+      "icon_name" : "cubeItem"
+    },
+    {
+      "name" : "Repositioning Extensions 1 \"(\"",
+      "actions" : [
+        {
+          "identifier" : "regular expression",
+          "file_part" : 0
+        },
+        {
+          "identifier" : "find and replace",
+          "search_string" : ".png",
+          "replace_string" : "png",
+          "file_part" : 0
+        },
+        {
+          "identifier" : "find and replace",
+          "search_string" : ".jpg",
+          "replace_string" : "jpg",
+          "file_part" : 0
+        },
+        {
+          "identifier" : "find and replace",
+          "search_string" : "(",
+          "replace_string" : ".(",
+          "file_part" : 0
+        }
+      ],
+      "icon_name" : "cubeItem"
+    },
+    {
+      "name" : "Remove All (REGEX)",
+      "actions" : [
+        {
+          "identifier" : "regular expression",
+          "search_string" : "^(?!.*\\.$).*",
+          "file_part" : 0
+        },
+        {
+          "identifier" : "regular expression",
+          "search_string" : "-_-[0-9]",
+          "file_part" : 0
+        },
+        {
+          "identifier" : "find and replace",
+          "search_string" : "",
+          "replace_string" : "",
+          "file_part" : 0
+        }
+      ],
+      "icon_name" : "cubeItem"
+    },
+    {
+      "name" : "Remove All (Add Index @ EOF)",
+      "actions" : [
+        {
+          "identifier" : "regular expression",
+          "search_string" : "^(?!.*\\.$).*",
+          "file_part" : 0
+        },
+        {
+          "identifier" : "find and replace",
+          "search_string" : "",
+          "replace_string" : "",
+          "file_part" : 0
+        },
+        {
+          "identifier" : "numbers",
+          "step" : 1,
+          "prefix_suffix_text" : "-1-(x)-",
+          "string_format" : 1,
+          "offset" : 103,
+          "numbering_mode" : 2,
+          "file_part" : 0
+        }
+      ],
+      "icon_name" : "cubeItem"
+    },
+    {
+      "name" : "Repositioning Extensions 2 \"[\"",
+      "actions" : [
+        {
+          "identifier" : "find and replace",
+          "search_string" : "",
+          "replace_string" : "",
+          "file_part" : 0
+        },
+        {
+          "identifier" : "find and replace",
+          "search_string" : "png",
+          "replace_string" : ".png",
+          "file_part" : 1
+        },
+        {
+          "identifier" : "find and replace",
+          "search_string" : "jpg",
+          "replace_string" : ".jpg",
+          "file_part" : 1
+        },
+        {
+          "identifier" : "find and replace",
+          "search_string" : ".[",
+          "replace_string" : "[",
+          "file_part" : 1
+        }
+      ],
+      "icon_name" : "imageItem"
+    },
+    {
+      "name" : "Repositioning Extensions 2 \"(\"",
+      "actions" : [
+        {
+          "identifier" : "regular expression",
+          "file_part" : 0
+        },
+        {
+          "identifier" : "find and replace",
+          "search_string" : "png",
+          "replace_string" : ".png",
+          "file_part" : 0
+        },
+        {
+          "identifier" : "find and replace",
+          "search_string" : "jpg",
+          "replace_string" : ".jpg",
+          "file_part" : 0
+        },
+        {
+          "identifier" : "find and replace",
+          "search_string" : ".(",
+          "replace_string" : "(",
+          "file_part" : 0
+        }
+      ],
+      "icon_name" : "cubeItem"
+    },
+    {
+      "name" : "Music",
+      "renamerlets" : [
+        {
+          "name" : "\"'Track Number' 'Title'\" ",
+          "actions" : [
+            {
+              "identifier" : "music",
+              "tag_fields" : [
+                {
+                  "value" : "track number",
+                  "label" : "Track Number",
+                  "type" : "format"
+                },
+                {
+                  "value" : "__",
+                  "label" : "__",
+                  "type" : "literal"
+                },
+                {
+                  "value" : "filename",
+                  "label" : "Filename",
+                  "type" : "variable"
+                }
+              ],
+              "number_of_digits" : 1
+            }
+          ],
+          "icon_name" : "musicItem"
+        },
+        {
+          "name" : "Convert .EXTN to .ext (Music)",
+          "actions" : [
+            {
+              "identifier" : "find and replace",
+              "search_string" : "MP3",
+              "replace_string" : "mp3",
+              "case_sensitive" : true,
+              "file_part" : 2
+            },
+            {
+              "identifier" : "find and replace",
+              "search_string" : "M4A",
+              "replace_string" : "m4a",
+              "case_sensitive" : true,
+              "file_part" : 2
+            },
+            {
+              "identifier" : "find and replace",
+              "search_string" : "FLAC",
+              "replace_string" : "flac",
+              "case_sensitive" : true,
+              "file_part" : 2
+            },
+            {
+              "identifier" : "find and replace",
+              "search_string" : "AAC",
+              "replace_string" : "aac",
+              "case_sensitive" : true,
+              "file_part" : 2
+            }
+          ],
+          "icon_name" : "musicItem"
+        }
+      ],
+      "icon_name" : "music_group"
+    },
+    {
+      "name" : "Photos",
+      "renamerlets" : [
+        {
+          "name" : "Append Dimensions",
+          "actions" : [
+            {
+              "identifier" : "image",
+              "tag_fields" : [
+                {
+                  "value" : "filename",
+                  "label" : "Filename",
+                  "type" : "variable"
+                },
+                {
+                  "value" : "_(",
+                  "label" : "_(",
+                  "type" : "literal"
+                },
+                {
+                  "value" : "PixelWidth",
+                  "label" : "Width",
+                  "type" : "format"
+                },
+                {
+                  "value" : "x",
+                  "label" : "x",
+                  "type" : "literal"
+                },
+                {
+                  "value" : "PixelHeight",
+                  "label" : "Height",
+                  "type" : "format"
+                },
+                {
+                  "value" : ")",
+                  "label" : ")",
+                  "type" : "literal"
+                }
+              ]
+            }
+          ],
+          "icon_name" : "imageItem"
+        },
+        {
+          "name" : "Insert Date Created (EXIF)",
+          "actions" : [
+            {
+              "identifier" : "date and time",
+              "tag_fields" : [
+                {
+                  "value" : "YYYY",
+                  "label" : "Year",
+                  "type" : "format"
+                },
+                {
+                  "value" : "-",
+                  "label" : "-",
+                  "type" : "literal"
+                },
+                {
+                  "value" : "MM",
+                  "label" : "Month",
+                  "type" : "format"
+                },
+                {
+                  "value" : "-",
+                  "label" : "-",
+                  "type" : "literal"
+                },
+                {
+                  "value" : "dd",
+                  "label" : "Day",
+                  "type" : "format"
+                },
+                {
+                  "value" : " ",
+                  "label" : " ",
+                  "type" : "literal"
+                },
+                {
+                  "value" : "HH",
+                  "label" : "Hour",
+                  "type" : "format"
+                },
+                {
+                  "value" : ".",
+                  "label" : ".",
+                  "type" : "literal"
+                },
+                {
+                  "value" : "mm",
+                  "label" : "Minute",
+                  "type" : "format"
+                },
+                {
+                  "value" : ".",
+                  "label" : ".",
+                  "type" : "literal"
+                },
+                {
+                  "value" : "ss",
+                  "label" : "Second",
+                  "type" : "format"
+                }
+              ],
+              "date_value" : 10
+            }
+          ],
+          "icon_name" : "imageItem"
+        },
+        {
+          "name" : "Add Camera Name",
+          "actions" : [
+            {
+              "identifier" : "image",
+              "tag_fields" : [
+                {
+                  "value" : "filename",
+                  "label" : "Filename",
+                  "type" : "variable"
+                },
+                {
+                  "value" : " - ",
+                  "label" : " - ",
+                  "type" : "literal"
+                },
+                {
+                  "value" : "Make",
+                  "label" : "Camera Make",
+                  "type" : "format"
+                },
+                {
+                  "value" : " ",
+                  "label" : " ",
+                  "type" : "literal"
+                },
+                {
+                  "value" : "Model",
+                  "label" : "Camera Model",
+                  "type" : "format"
+                }
+              ]
+            }
+          ],
+          "icon_name" : "imageItem"
+        },
+        {
+          "name" : "Convert .EXTN to .ext (P&V)",
+          "actions" : [
+            {
+              "identifier" : "find and replace",
+              "search_string" : "JPEG",
+              "replace_string" : "jpg",
+              "case_sensitive" : true,
+              "file_part" : 2
+            },
+            {
+              "identifier" : "find and replace",
+              "search_string" : "jpeg",
+              "replace_string" : "jpg",
+              "case_sensitive" : true,
+              "file_part" : 2
+            },
+            {
+              "identifier" : "find and replace",
+              "search_string" : "JPG",
+              "replace_string" : "jpg",
+              "case_sensitive" : true,
+              "file_part" : 2
+            },
+            {
+              "identifier" : "find and replace",
+              "search_string" : "PNG",
+              "replace_string" : "png",
+              "case_sensitive" : true,
+              "file_part" : 2
+            },
+            {
+              "identifier" : "find and replace",
+              "search_string" : "HEIC",
+              "replace_string" : "heic",
+              "case_sensitive" : true,
+              "file_part" : 2
+            },
+            {
+              "identifier" : "find and replace",
+              "search_string" : "MOV",
+              "replace_string" : "mov",
+              "case_sensitive" : true,
+              "file_part" : 2
+            },
+            {
+              "identifier" : "find and replace",
+              "search_string" : "MP4",
+              "replace_string" : "mp4",
+              "case_sensitive" : true,
+              "file_part" : 2
+            }
+          ],
+          "icon_name" : "imageItem"
+        }
+      ],
+      "icon_name" : "image_group"
+    },
+    {
+      "name" : "Archiving",
+      "renamerlets" : [
+        {
+          "name" : "Insert Date Created (System)",
+          "actions" : [
+            {
+              "identifier" : "date and time",
+              "tag_fields" : [
+                {
+                  "value" : "YYYY",
+                  "label" : "Year",
+                  "type" : "format"
+                },
+                {
+                  "value" : "-",
+                  "label" : "-",
+                  "type" : "literal"
+                },
+                {
+                  "value" : "MM",
+                  "label" : "Month",
+                  "type" : "format"
+                },
+                {
+                  "value" : "-",
+                  "label" : "-",
+                  "type" : "literal"
+                },
+                {
+                  "value" : "dd",
+                  "label" : "Day",
+                  "type" : "format"
+                },
+                {
+                  "value" : " ",
+                  "label" : " ",
+                  "type" : "literal"
+                },
+                {
+                  "value" : "HH",
+                  "label" : "Hour",
+                  "type" : "format"
+                },
+                {
+                  "value" : ".",
+                  "label" : ".",
+                  "type" : "literal"
+                },
+                {
+                  "value" : "mm",
+                  "label" : "Minute",
+                  "type" : "format"
+                },
+                {
+                  "value" : ".",
+                  "label" : ".",
+                  "type" : "literal"
+                },
+                {
+                  "value" : "ss",
+                  "label" : "Second",
+                  "type" : "format"
+                }
+              ],
+              "date_value" : 0
+            }
+          ],
+          "icon_name" : "cubeItem"
+        },
+        {
+          "name" : "Insert Date Created (System - Indexed)",
+          "actions" : [
+            {
+              "identifier" : "date and time",
+              "tag_fields" : [
+                {
+                  "value" : "YYYY",
+                  "label" : "Year",
+                  "type" : "format"
+                },
+                {
+                  "value" : "-",
+                  "label" : "-",
+                  "type" : "literal"
+                },
+                {
+                  "value" : "MM",
+                  "label" : "Month",
+                  "type" : "format"
+                },
+                {
+                  "value" : "-",
+                  "label" : "-",
+                  "type" : "literal"
+                },
+                {
+                  "value" : "dd",
+                  "label" : "Day",
+                  "type" : "format"
+                },
+                {
+                  "value" : " ",
+                  "label" : " ",
+                  "type" : "literal"
+                },
+                {
+                  "value" : "HH",
+                  "label" : "Hour",
+                  "type" : "format"
+                },
+                {
+                  "value" : ".",
+                  "label" : ".",
+                  "type" : "literal"
+                },
+                {
+                  "value" : "mm",
+                  "label" : "Minute",
+                  "type" : "format"
+                },
+                {
+                  "value" : ".",
+                  "label" : ".",
+                  "type" : "literal"
+                },
+                {
+                  "value" : "ss",
+                  "label" : "Second",
+                  "type" : "format"
+                }
+              ],
+              "date_value" : 0
+            },
+            {
+              "identifier" : "characters insert",
+              "insert_text" : "__--",
+              "insert_position" : 0,
+              "insert_side" : 1,
+              "file_part" : 0
+            },
+            {
+              "identifier" : "numbers",
+              "step" : 1,
+              "prefix_suffix_text" : "-",
+              "string_format" : 0,
+              "offset" : 1,
+              "numbering_mode" : 1,
+              "file_part" : 0
+            }
+          ],
+          "icon_name" : "cubeItem"
+        },
+        {
+          "name" : "Insert Date Created (System - Words)",
+          "actions" : [
+            {
+              "identifier" : "date and time",
+              "tag_fields" : [
+                {
+                  "value" : "YYYY",
+                  "label" : "Year",
+                  "type" : "format"
+                },
+                {
+                  "value" : "-",
+                  "label" : "-",
+                  "type" : "literal"
+                },
+                {
+                  "value" : "MM",
+                  "label" : "Month",
+                  "type" : "format"
+                },
+                {
+                  "value" : "-",
+                  "label" : "-",
+                  "type" : "literal"
+                },
+                {
+                  "value" : "dd",
+                  "label" : "Day",
+                  "type" : "format"
+                },
+                {
+                  "value" : " ",
+                  "label" : " ",
+                  "type" : "literal"
+                },
+                {
+                  "value" : "HH",
+                  "label" : "Hour",
+                  "type" : "format"
+                },
+                {
+                  "value" : ".",
+                  "label" : ".",
+                  "type" : "literal"
+                },
+                {
+                  "value" : "mm",
+                  "label" : "Minute",
+                  "type" : "format"
+                },
+                {
+                  "value" : ".",
+                  "label" : ".",
+                  "type" : "literal"
+                },
+                {
+                  "value" : "ss",
+                  "label" : "Second",
+                  "type" : "format"
+                }
+              ],
+              "date_value" : 0
+            },
+            {
+              "identifier" : "characters insert",
+              "insert_text" : "__--",
+              "insert_position" : 0,
+              "insert_side" : 1,
+              "file_part" : 0
+            }
+          ],
+          "icon_name" : "cubeItem"
+        },
+        {
+          "name" : "Add Dimensions to Index",
+          "actions" : [
+            {
+              "identifier" : "characters remove",
+              "remove_from_position" : 0,
+              "remove_from_side" : 0,
+              "remove_to_position" : 17,
+              "remove_to_side" : 0,
+              "file_part" : 0
+            },
+            {
+              "identifier" : "image",
+              "tag_fields" : [
+                {
+                  "value" : "PixelWidth",
+                  "label" : "Width",
+                  "type" : "format"
+                },
+                {
+                  "value" : "x",
+                  "label" : "x",
+                  "type" : "literal"
+                },
+                {
+                  "value" : "PixelHeight",
+                  "label" : "Height",
+                  "type" : "format"
+                },
+                {
+                  "value" : "filename",
+                  "label" : "Filename",
+                  "type" : "variable"
+                }
+              ]
+            },
+            {
+              "identifier" : "numbers",
+              "step" : 1,
+              "prefix_suffix_text" : "-(",
+              "string_format" : 1,
+              "offset" : 17,
+              "numbering_mode" : 1,
+              "file_part" : 0
+            },
+            {
+              "identifier" : "characters insert",
+              "insert_text" : "CSM__Makima-",
+              "insert_position" : 0,
+              "insert_side" : 0,
+              "file_part" : 0
+            }
+          ],
+          "icon_name" : "imageItem"
+        },
+        {
+          "name" : "Substract One Digit to Index",
+          "actions" : [
+            {
+              "identifier" : "regular expression",
+              "case_sensitive" : true,
+              "search_string" : "[0-9][0-9][0-9]-1",
+              "file_part" : 0
+            },
+            {
+              "identifier" : "numbers",
+              "step" : 1,
+              "prefix_suffix_text" : "-1",
+              "string_format" : 1,
+              "offset" : 103,
+              "numbering_mode" : 2,
+              "file_part" : 0
+            },
+            {
+              "identifier" : "characters insert",
+              "insert_text" : "CSM__Makima-",
+              "insert_position" : 0,
+              "insert_side" : 0,
+              "file_part" : 0
+            }
+          ],
+          "icon_name" : "imageItem"
+        }
+      ],
+      "icon_name" : "cube_group"
+    },
+    {
+      "name" : "Miscellaneous",
+      "renamerlets" : [
+        {
+          "name" : "Remove Spaces",
+          "actions" : [
+            {
+              "identifier" : "find and replace",
+              "search_string" : " ",
+              "replace_string" : "",
+              "file_part" : 0
+            }
+          ],
+          "icon_name" : "genericItem"
+        },
+        {
+          "name" : "Prepend Folder Name",
+          "actions" : [
+            {
+              "identifier" : "path",
+              "level" : 0,
+              "direction" : 0,
+              "separator" : " - "
+            }
+          ],
+          "icon_name" : "genericItem"
+        }
+      ],
+      "icon_name" : "generic_group"
+    }
+  ]
+}

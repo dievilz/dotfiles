@@ -1,0 +1,158 @@
+#########################################
+## dievilz' DEFAULT RUN COMMANDS FILE  ##
+#########################################
+
+## Printing for debugging purposes if session is interactive
+[[ -o interactive ]] && echo "Sourced: \$ZDOTDIR/.zshrc"
+
+
+## If the session is non-login interactive, /etc/zprofile will not be sourced,
+## only this file will be. We need to source it if we are in macOS because
+## we need our env vars initialized.
+if [ "$(uname -s)" = "Darwin" ];
+then
+	if [[ ! -o login ]];
+	then
+		[ -r "${ZDOTDIR:-$HOME/.config/zsh}/.zprofile" ] \
+		&& . "${ZDOTDIR:-$HOME/.config/zsh}/.zprofile"
+	fi
+fi
+
+## Path to your $ZSH installation.
+[ -d "/opt/zsh" ] && export ZSH="/opt/zsh"
+
+
+################################### PLUGINS ####################################
+
+## Which plugins would you like to load?
+## Add wisely, as too many plugins slow down shell startup:
+[ "$(uname -s)" = "Darwin" ] && plugins=( osx )
+[ "$(uname -s)" = "Linux" ] && plugins=( archlinux )
+
+plugins+=(
+	alias-finder chucknorris colored-man-pages colorize composer extract
+	git git-flow-avh github ng node nvm pyenv themes wd z
+	fast-alias-tips
+)
+## Possible plugins: command-not-found dirhistory thefuck tiny-care-terminal
+## web-search
+
+
+## My custom settings for POSIX  3rd Party plugins/Custom plugins
+while IFS= read -r -d '' shllplugn;
+do
+	[ -r "$shllplugn" ] && . "$shllplugn"
+done \
+< <(find "${SHELL_HOME:-$HOME/.local/share/shell}/plugins" \
+	-name "*.plugin.sh" -type f -print0 2> /dev/null)
+unset shllplugn
+CUSTOM_PLUGINS_LOADED=true
+
+
+
+################################### THEMES #####################################
+
+# Set name of the theme to load --- if set to "random", it will
+# load a random theme each time oh-my-zsh is loaded, in which case,
+# to know which specific one was loaded, run: echo $RANDOM_THEME
+# [ -z $theme ] && theme=$(jot -w %i -r 1 1 5+1) # NumOfResults, Min, + (Max+1)
+
+theme=2
+# echo "$theme"
+case "$theme" \
+in
+	"1") ZSH_THEME="powerlevel9k/powerlevel9k"
+		export POWERLEVEL9K_MODE="nerdfont-complete"
+	;;
+	"2") ZSH_THEME="powerlevel10k/powerlevel10k"
+	;;
+	"3") ZSH_THEME="spaceship/spaceship"
+	;;
+	"4") ZSH_THEME="geometry/geometry"
+	;;
+	*) ZSH_THEME="hyperzsh/hyperzsh"
+	;;
+esac
+
+
+################################### OPTIONS ####################################
+
+## Sourcing Custom Configuration Script  OR  Oh My Zsh
+[ -z $opt ] && opt=$(jot -w %i -r 1 1 2+1) # NumOfResults, Min, + (Max+1)
+
+opt=1
+# echo "$opt"
+case "$opt" \
+in
+	"1")
+		[ -r "$ZSH"/configure.script.zsh ] && . "$ZSH"/configure.script.zsh
+	;;
+	"2")
+		## Path to your "oh-my-zsh" installation.
+		[ -r "/opt/oh-my-zsh/oh-my-zsh.sh" ] && export OMZ="/opt/oh-my-zsh"
+
+		## Uncomment the following line to use case-sensitive completion.
+		CASE_SENSITIVE="false"
+
+		## Uncomment one of the following lines to change the auto-update behavior
+		# zstyle ':omz:update' mode disabled  # disable automatic updates
+		# zstyle ':omz:update' mode auto      # update automatically without asking
+		# zstyle ':omz:update' mode reminder  # just remind me to update when it's time
+
+		# Uncomment the following line to automatically update without prompting.
+		DISABLE_UPDATE_PROMPT="true"
+
+		## Disable the completion-revision when "sudo -s"-ing
+		ZSH_DISABLE_COMPFIX=true
+
+
+		## Sourcing Oh My Zsh
+		[ -r "$OMZ"/oh-my-zsh.sh ] && . "$OMZ"/oh-my-zsh.sh
+
+
+		## Unalias Oh My Zsh predefined aliases
+		unalias md > /dev/null 2>&1
+		unalias rd > /dev/null 2>&1
+		unalias _ > /dev/null 2>&1
+		unalias afind > /dev/null 2>&1
+		unalias which-command > /dev/null 2>&1
+		unalias run-help > /dev/null 2>&1
+
+		## Unsetopt Oh My Zsh predefined options
+		unsetopt share_history      # Imports new lines from $HISTFILE, and append typed lines to $HISTFILE
+	;;
+esac
+unset opt
+
+
+
+########################## THEMES (CUSTOM SETTINGS) ############################
+
+## Sourcing Custom configurations for themes
+# echo "$theme"
+case "$theme" \
+in
+	"1") [ -r "$ZDOTDIR/scripts/themes.script.zsh" ] && \
+			. "$ZDOTDIR/scripts/themes.script.zsh" powerlevel9k omz
+	;;
+	"2") [ -r "$ZDOTDIR/scripts/themes.script.zsh" ] && \
+			. "$ZDOTDIR/scripts/themes.script.zsh" powerlevel10k omz
+	;;
+	"3") [ -r "$ZDOTDIR/scripts/themes.script.zsh" ] && \
+			. "$ZDOTDIR/scripts/themes.script.zsh" spaceship omz
+	;;
+	"4") [ -r "$ZDOTDIR/scripts/themes.script.zsh" ] && \
+			. "$ZDOTDIR/scripts/themes.script.zsh" geometry omz
+	;;
+	*) [ -r "$ZDOTDIR/scripts/themes.script.zsh" ] && \
+		  . "$ZDOTDIR/scripts/themes.script.zsh" hyperzsh omz
+	;;
+esac
+unset theme
+
+
+################################################################################
+
+
+## Source post-rc file to finish up Zsh interactive configurations
+[ -r "$ZDOTDIR/scripts/post-zshrc.script.zsh" ] && . "$ZDOTDIR/scripts/post-zshrc.script.zsh"

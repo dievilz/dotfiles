@@ -1,0 +1,15 @@
+#
+# ~/.config/shell/exports-ports-optlocal
+#
+
+## Main Homebrew Packages
+export MANPATH="/opt/local/share/man:$MANPATH"
+export INFOPATH="/opt/local/share/info:$INFOPATH"
+export MP_PREFIX="/opt/local"
+
+################# USE PKGIN TO DOWNLOAD & EXPORT GNU BINARIES ##################
+
+################################################################################
+
+
+echo "Sourced: exports-macos-ports-optlocal"

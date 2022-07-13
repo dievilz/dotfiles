@@ -1,0 +1,6 @@
+audio.play_bitrate_enumeration=4
+audio.sync_bitrate_enumeration=4
+ui.show_unplayable_tracks=true
+ui.show_friend_feed=false
+app.browser.zoom-level=-150
+ui.experience_override="classic"

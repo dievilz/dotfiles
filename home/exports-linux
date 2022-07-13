@@ -1,0 +1,66 @@
+#
+# ~/.exports-linux
+#
+
+
+## Check for Arch-based Linux
+check_arch_exportslinux() {
+	[ -r "${SHELL_HOME:-$HOME/.etc/shell}/exports-linux-arch" ] \
+	&& . "${SHELL_HOME:-$HOME/.etc/shell}/exports-linux-arch"
+	PKGER=linux-arch
+
+	function pacmanS() {
+		pacman search "^$@$"
+	}
+	alias pacmanA='pacman autoremove '
+	alias pacmanC='pacman clean '
+	alias pacmanL='pacman list'
+	alias pacmanR='pacman remove '
+
+	export PKGER
+}
+
+
+## Check for Void Linux
+check_void_exportslinux() {
+	[ -r "${SHELL_HOME:-$HOME/.etc/shell}/exports-linux-void" ] \
+	&& . "${SHELL_HOME:-$HOME/.etc/shell}/exports-linux-void"
+	PKGER=linux-void
+
+	alias xbpsQ='xbps-query '
+	alias xbpsUp='xbps-install -Su'
+	alias xbpsI='xbps-install '
+	alias xbpsR='xbps-remove '
+	alias xbpsS='xbps-query -Rs '
+	alias xbpsL='xbps-query -l '
+	alias xbpsLm='xbps-query -m '
+	alias xbpsRc='xbps-reconfigure -f '
+	alias xbpsAl='xbps-alternatives '
+	alias xchrt='xcheckrestart'
+	alias xloc='xlocate'
+
+	alias vpm='vpm --color=auto'
+	alias vpmUp='vpm update'
+	alias vpmI='vpm install '
+	alias vpmR='vpm remove '
+	alias vpmS='vpm search '
+
+	export PKGER
+}
+
+
+
+#-------------------------------------------------------------------------------
+
+main_exportslinux() {
+	case "$(uname -s)" in
+		"GNU"|"Linux")
+			case $(sed -n -e '/PRETTY_NAME/ s/^.*=\|"\| .*//gp' /etc/*release) in
+				"Arch"* ) check_arch_exportslinux ;;
+				*"Void"* ) check_void_exportslinux ;;
+			esac
+		;;
+	esac
+}
+
+main_exportslinux; return

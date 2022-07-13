@@ -1,0 +1,158 @@
+#
+# ~/.exports
+#
+
+## Check for Fink install
+check_fnk_exportsmacos() {
+	if [ -x /sw/bin/fink ]; then
+		if [[ ! "$PATH" == */sw/bin:/sw/sbin:* ]]; then
+			PATH="/sw/bin:/sw/sbin:${PATH}"
+			export PATH
+		fi
+		[ -r "${SHELL_HOME:-$HOME/.etc/shell}/exports-macos-fink-sw" ] \
+		&& . "${SHELL_HOME:-$HOME/.etc/shell}/exports-macos-fink-sw"
+		PKGER=macos-fink-sw
+
+
+	else
+		return
+	fi
+	export PKGER
+}
+
+## Check for Homebrew install
+check_hombrew_exportsmacos() {
+	if [ -x /opt/homebrew/bin/brew ]; then
+		if [[ ! "$PATH" == */opt/homebrew/bin:/opt/homebrew/sbin:* ]]; then
+			PATH="/opt/homebrew/bin:/opt/homebrew/sbin:${PATH}"
+			export PATH
+		fi
+		[ -r "${SHELL_HOME:-$HOME/.etc/shell}/exports-macos-homebrew-opt" ] \
+		&& . "${SHELL_HOME:-$HOME/.etc/shell}/exports-macos-homebrew-opt"
+		PKGER=macos-homebrew-opt
+
+
+
+	elif [ -x /usr/local/bin/brew ]; then
+		if [[ ! "$PATH" == */usr/local/bin:* ]]; then
+			PATH="/usr/local/bin:${PATH}"
+			export PATH
+		fi
+		[ -r "${SHELL_HOME:-$HOME/.etc/shell}/exports-macos-homebrew-usrlocal" ] \
+		&& . "${SHELL_HOME:-$HOME/.etc/shell}/exports-macos-homebrew-usrlocal"
+		PKGER=macos-homebrew-usrlocal
+
+
+
+	elif [ -x "$HOME"/.opt/homebrew/bin/brew ]; then
+		if [[ ! "$PATH" == *"$HOME"/.opt/homebrew/bin:"$HOME"/.opt/homebrew/sbin:* ]]; then
+			PATH=""$HOME"/.opt/homebrew/bin:"$HOME"/.opt/homebrew/sbin:${PATH}"
+			export PATH
+		fi
+		[ -r "${SHELL_HOME:-$HOME/.etc/shell}/exports-macos-homebrew-home" ] \
+		&& . "${SHELL_HOME:-$HOME/.etc/shell}/exports-macos-homebrew-home"
+		PKGER=macos-homebrew-home
+
+
+	else
+		return
+	fi
+
+	alias brewS='brew search '
+	alias cask='brew cask '
+
+	alias brewup='brew update; brew upgrade; brew cleanup; brew doctor'
+	alias brewcheck='brew cleanup; brew doctor'
+	alias caskup='brew outdated --cask; brew upgrade --cask; brew doctor --verbose'
+
+	alias myBrews='printf "\033[38;5;94mBrew Libraries:\033[0m\n"; brew ls; echo; printf "\033[38;5;94mCask Apps:\033[0m\n"; brew ls --cask'
+
+	alias brewStartServs='sudo brew services start '
+	alias brewRestartServs='sudo brew services restart '
+	alias brewStopServs="sudo brew services stop "
+
+	export HOMEBREW_NO_ANALYTICS=1
+	export HOMEBREW_NO_INSECURE_REDIRECT=1
+	export HOMEBREW_CASK_OPTS=--require-sha
+	export PKGER
+}
+
+## Check for MacPorts install
+check_mcports_exportsmacos() {
+	if [ -x /opt/local/bin/port ]; then
+		if [[ ! "$PATH" == */opt/local/bin:/opt/local/sbin:* ]]; then
+			PATH="/opt/local/bin:/opt/local/sbin:${PATH}"
+			export PATH
+		fi
+		[ -r "${SHELL_HOME:-$HOME/.etc/shell}/exports-macos-ports-optlocal" ] \
+		&& . "${SHELL_HOME:-$HOME/.etc/shell}/exports-macos-ports-optlocal"
+		PKGER=macos-ports-optlocal
+
+
+
+	elif [ -x /opt/ports/bin/port ]; then
+		if [[ ! "$PATH" == */opt/ports/bin:/opt/ports/sbin:* ]]; then
+			PATH="/opt/ports/bin:/opt/ports/sbin:${PATH}"
+			export PATH
+		fi
+		[ -r "${SHELL_HOME:-$HOME/.etc/shell}/exports-macos-ports-opt" ] \
+		&& . "${SHELL_HOME:-$HOME/.etc/shell}/exports-macos-ports-opt"
+		PKGER=macos-ports-opt
+
+
+	else
+		return
+	fi
+
+	alias portC='sudo port clean '
+	alias portI='sudo port install -bNqtv '
+	alias portU='sudo port -fp uninstall '
+
+	alias portL='port echo installed '
+	alias portS='port search --case-sensitive --exact '
+	alias portV='port variants '
+
+	export PKGER
+}
+
+## Check for NetBSD Pkgin install
+check_pkgn_exportsmacos() {
+	if [ -x /opt/pkg/bin/pkgin ]; then
+		if [[ ! "$PATH" == */opt/pkg/bin:/opt/pkg/sbin:* ]]; then
+			PATH="/opt/pkg/bin:/opt/pkg/sbin:${PATH}"
+			export PATH
+		fi
+		[ -r "${SHELL_HOME:-$HOME/.etc/shell}/exports-macos-pkgin-optpkg" ] \
+		&& . "${SHELL_HOME:-$HOME/.etc/shell}/exports-macos-pkgin-optpkg"
+		PKGER=macos-pkgin-optpkg
+
+
+	else
+		return
+	fi
+
+	function pkginS() {
+		pkgin search "^$@$"
+	}
+	alias pkginA='sudo pkgin autoremove '
+	alias pkginC='sudo pkgin clean '
+	alias pkginL='sudo pkgin list'
+	alias pkginU='sudo pkgin remove '
+
+	export PKGER
+}
+
+
+
+main_exportsmacos() {
+	case "$(uname -s)" in
+		"Darwin")              ## macOS Package Managers
+			check_fnk_exportsmacos
+			check_hombrew_exportsmacos
+			check_mcports_exportsmacos
+			check_pkgn_exportsmacos
+		;;
+	esac
+}
+
+main_exportsmacos; return

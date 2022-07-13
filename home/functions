@@ -1,0 +1,989 @@
+#!/bin/bash
+#
+# @dievilz' custom shell functions
+
+
+##################################### LIST #####################################
+
+functions_uselessFunction() \
+{
+	hiless
+	pyless
+	e2less
+
+	thisShell
+	sourceAliases
+
+	newShcript
+	debugZshShcript
+	debugPosixShcript
+
+	modifyPerms
+	convertAudio
+
+	multiLink
+	verifyXDG
+
+	linkShellFiles
+	linkZshrc
+	changeZshrc
+
+	removeMetadata
+	removeMacShit
+	removeShellCache
+
+	createMacOSInstaller
+	verifyMacOSProgram
+
+	runitHelper
+}
+
+################################################################################
+
+
+# less with Coloring: highlight
+hiless() \
+{
+	export LESSOPEN='| highlight --line-numbers -O xterm256 -s molokai %s 2>/dev/null ' less "$@"
+}
+
+# less with Coloring: pygmentize
+pyless() \
+{
+	export LESSOPEN='| pygmentize -g -f terminal256 %s 2>/dev/null ' less "$@"
+}
+
+# less with Coloring: e2ansi of emacs
+e2less() \
+{
+	export 'LESSOPEN=||-emacs --batch -Q -l ~/.emacs -l bin/e2ansi-cat %s 2>/dev/null ' less "$@"
+}
+
+
+# 1 <---------------------------------------------------------------------------
+#    thisShell -
+#     Options: -
+# Description: Prints the running shell in the terminal and its path
+#
+# 2 <---------------------------------------------------------------------------
+# sourceAliases <category_of_aliases1> <category_of_aliases2> <category_of_aliasesN>...
+#     Options: "N" categories of aliases inside aliasfile
+# Description: Sources an specific category of aliases inside ~/.aliases
+#              regardless of working dir. if detects 0 options, it will halt.
+#
+
+thisShell() \
+{
+	local thisShellis
+	thisShellis="$(lsof -p "$$" | grep -m 1 txt | xargs -n 1 | tail -n +9 | xargs)"
+	printf "\n$(command -v ${thisShellis})\n"
+	printf "$(${thisShellis} --version)\n\n"
+}
+
+sourceAliases() \
+{
+	if [ "$#" -gt 0 ]; then
+		while [ -n "$1" ]; do
+			source "$HOME/.aliases" "$1"
+			shift
+		done
+	else
+		printf "%b" "\n\033[38;31mError: you must enter one or more " \
+		"aliases categories to be re-sourced!\033[0m\n"
+		source "$HOME/.aliases" --help
+	fi
+}
+
+
+
+
+################################################################################
+
+# 1 <---------------------------------------------------------------------------
+#   newSchript <file1.ext> <file2.ext> <fileN.ext>...
+#     Options: N file per execution
+# Description: Create a file with perms 744, so it can be executable only for owner.
+#
+# 2 <---------------------------------------------------------------------------
+# debugZshShcript <file1.ext> <file2.ext> <fileN.ext>...
+#     Options: "N" files per execution
+# Description: Execute file in terminal with Zsh. Will create file at $SHDEBUG_HOME
+#              value.
+#
+# 3 <---------------------------------------------------------------------------
+# debugPosixShcript <file1.ext> <file2.ext> <fileN.ext>...
+#     Options: "N" files per execution
+# Description: Execute file in terminal with POSIX shell (Dash). Will create file
+#              at $SHDEBUG_HOME value.
+#
+
+newShcript() \
+{
+	if [ "$#" -gt 0 ]; then
+		while [ -n "$1" ]; do
+			install -m 744 /dev/null "$1" && printf "\033[38;32m$1 created!\033[0m\n"
+			shift
+		done
+	else
+		printf "%b" "\n\033[38;31mError: you must enter one or more shcripts " \
+		"to be created!\033[0m\n\n"
+	fi
+}
+
+debugZshShcript() \
+{
+	if [ "$#" -gt 0 ]; then
+		while [ -n "$1" ]; do
+			zsh -xv "$1" &> "$SHDEBUG_HOME/$(basename "$1")-debug.sh"
+			shift
+		done
+	else
+		printf "%b" "\n\033[38;31mError: you must enter one or more Zsh shcripts " \
+		"to be debugged!\033[0m\n\n"
+	fi
+}
+
+debugPosixShcript() \
+{
+	if [ "$#" -gt 0 ]; then
+		while [ -n "$1" ]; do
+			dash -xv "$1" 2> "$SHDEBUG_HOME/$1-debug.sh"
+			shift
+		done
+	else
+		printf "%b" "\n\033[38;31mError: you must enter one or more POSIX shcripts " \
+		"to be debugged!\033[0m\n\n"
+	fi
+}
+
+
+
+
+################################################################################
+
+# 1 <---------------------------------------------------------------------------
+#  modifyPerms <filetype> <octal_perms> <file_extension/directory name pattern> <max_depth_of_recursion> <full_path>
+#     Options: Filter by type: file (f,-f,--file) or directory (d,-d,--dir)
+#              Permisssions in Octal notation
+#              File extension of the filetype to change its permission
+#              Depth level of recursion
+#              Full path of the dir/file
+# Description: Changes the permissions of any files with the specified extension
+#              or dirs present at the working dir.
+#
+# 2 <---------------------------------------------------------------------------
+# convertAudio <input_codec> <output_codec> <max_depth_of_recursion> <full_path>
+#     Options: Input files codec
+#              Desired output codec for the files
+#              Depth level of recursion
+#              Full path of the dir/file
+# Description: The function convert audio files to another audio codec at any
+#              path, using ffmpeg
+#
+
+modifyPerms() \
+{
+	# local filetype
+	# local perms
+	# local name
+	# local depth
+	# local fullpath
+
+	# filetype="$1" ## Filetype: (d)irectory or (f)ile
+	#    perms="$2"  ## Permissions in Octal
+	#     name="$3" ## File extension/Dir name
+	#    depth="$4" ## Any depth of recursion
+	# fullpath="$5" ## Full path of the dir/file
+
+	# echo "$filetype"
+	# echo "$perms"
+	# echo "$name"
+	# echo "$depth"
+	# echo "$fullpath"
+
+	if [ "$1" = "f" ] || [ "$1" = "d" ];
+	then
+		if [ "$#" -eq 5 ]; then
+			while IFS= read -r -d '' fileToMod; do
+				# echo $fileToMod
+				chmod -v "$2" "$fileToMod"
+			done < <(find "$5" -maxdepth "$4" -name "$3" -type "$1" -print0)
+			return
+		else
+			true
+		fi
+
+	elif [ "$1" = "lf" ] || [ "$1" = "ld" ];
+	then
+		if [ "$#" -eq 5 ]; then
+			while IFS= read -r -d '' fileToMod; do
+				# echo $fileToMod
+				chmod -v "$2" "$fileToMod"
+			done < <(find "$5" -maxdepth "$4" -name "$3" -type "$1" -print0)
+			return
+		else
+			true
+		fi
+
+	elif [ "$#" -lt 1 ]; then
+		true
+	else
+		printf "%b" "\n\033[38;31mError: invalid filetype!\033[0m\n\n"
+		return 1
+	fi
+	printf "%b" "\n\033[38;31mError: zero arguments!\033[0m Some examples:" \
+	"\n<modifyPerms f 744 " '"*.sh" 4 "$HOME/.dotfiles">' " for normal files" \
+	"\n<modifyPerms lf 744 " '"*.sh" 4 "$HOME/.dotfiles">' " for symlinked files" \
+	"\n<modifyPerms d 755 " '"*" 1 "$HOME/.dotfiles">' " for normal dirs" \
+	"\n<modifyPerms ld 755 " '"*" 1 "$HOME/.dotfiles">' " for symlinked dirs\n\n"
+}
+
+convertAudio() \
+{
+	local in      # $1
+	local out     # $2
+	local depth   # $3
+
+	local inpFlExt
+	local ctnrFmt
+
+	local audCodcLib
+	local audCodgFmt
+
+	local outFlExt
+
+	in="$1"
+	case "$in" in
+		"alac" )
+			inpFlExt="m4a"
+			# ctnrFmt="mp4"
+		;;
+		"flac" )
+			inpFlExt="flac"
+			ctnrFmt="flac"
+		;;
+	esac
+
+	out="$2"
+	case "$out" in
+		"alac" )
+			audCodcLib="alac"
+			audCodgFmt="alac"
+			outFlExt="m4a"
+		;;
+		"flac" )
+			audCodcLib="flac"
+			audCodgFmt="flac"
+			outFlExt="flac"
+		;;
+	esac
+
+	depth="$3"
+	if [ "$#" -eq 4 ]; then
+		while IFS= read -r -d '' f; do
+			# echo "$f"
+			ffmpeg -nostdin -i "$f" \
+				-c:a ${audCodcLib:-audCodgFmt} -c:v copy "${f%.*}.${outFlExt}";
+
+			# ffmpeg -nostdin -i "" -c:a "" -c:v copy ""
+
+		done < <(find "$4" -maxdepth "${depth}" -name "*.${ctnrFmt:-inpFlExt}" -type f -print0)
+
+	else
+		printf "%b" "\n\033[38;31mError: Missing argument(s)!\033[0m Formula:\n" \
+			"<convertAudio \"input_codec\" \"output_codec\" \"depth\" \"full_path\">\n" \
+			"Available conversions: flac(.flac)->alac(.m4a), alac(.m4a)->flac(.flac)\n\n"
+	fi
+}
+
+
+
+
+################################################################################
+
+# 1 <---------------------------------------------------------------------------
+# multiLink [1] <target_dir> <source_file1> <source_file2> <source_fileN>...
+#     Options: The target directory where the link will stay
+#              The source files/dirs where the link will point to
+# Description: Symlink multiple files to a single dir
+# -
+# multiLink [n] <source1> <target1> <source2> <target2> <source3> <target3>
+#     Options: The source file/dir where the link will point to
+#              The target directory where the link will stay
+# Description: Symlink one pair of one file to one directory, one pair at a time
+#
+# 2 <---------------------------------------------------------------------------
+#    verifyXDG -
+#     Options: no input
+# Description: Verify XDG compliance; in case $HOME folder is not compliant, the
+#              folders and symlinks will be made in order to make $HOME XDG-compliant
+#
+
+multiLink() \
+{
+	case "$1" in
+		"1"|"-1"|"--1")
+			shift
+			target="$1"
+			oldDirPerms="$(gstat -c "%a" "$target")"
+			shift
+
+			for source in "$@"; do
+				if [ -w "$target" ]; then
+					ln -fsv "$source" "$target"
+				else
+					chmod -v 751 "$target"
+					ln -fsv "$source" "$target"
+					chmod -v "${oldDirPerms}" "$target"
+				fi
+			done
+		;;
+		"n"|"-n"|"--n")
+			shift
+			while [ -n "$1" ] && [ -n "$2" ]; do
+				source="$1"
+				target="$2"
+				oldDirPerms="$(gstat -c "%a" "$target")"
+
+				if [ -w "$target" ]; then
+					ln -fsv "$source" "$target"
+				else
+					chmod -v 751 "$target"
+					ln -fsv "$source" "$target"
+					chmod -v "${oldDirPerms}" "$target"
+				fi
+				shift
+				shift
+			done
+		;;
+		*)
+			printf "%b" "\n\033[38;31mError: invalid arguments!\033[0m Some " \
+			"examples:\n<multiLink -1 \"target_dir\" \"source_file1\" \"source_file2\" " \
+			"\"source_fileN...\"> for a single dir\n<multiLink -n \"source1\" " \
+			"\"target1\" \"source2\" \"target2\" \"source3\" \"target3\"> for dirs\n\n"
+			return 1
+		;;
+	esac
+}
+
+verifyXDG() \
+{
+	echo
+	oldDirPerms="$(gstat -c "%a" "$HOME")"
+	chmod -v 751 "$HOME"
+	echo
+
+	printf "\033[38;34m%s\033[0m\n" "Verifying XDG_DATA_HOME = /usr/local/share"
+	[ ! -d "$HOME/.local" ] && mkdir -m 700 -pv "$HOME"/.local
+	[ ! -d "$HOME/.local/bin" ] && mkdir -pv "$HOME"/.local/bin
+	[ ! -d "$HOME/.local/lib" ] && mkdir -pv "$HOME"/.local/lib
+	[ ! -d "$HOME/.local/share" ] && mkdir -pv "$HOME"/.local/share
+	[ ! -d "$HOME/.local/share/gnupg" ] && mkdir -m 700 -pv "$HOME"/.local/share/gnupg
+	[ ! -d "$HOME/.local/share/ssh" ] && mkdir -m 700 -pv "$HOME"/.local/share/ssh
+	[ ! -d "$HOME/.local/share/dropbox" ] && mkdir -m 700 -pv "$HOME"/.local/share/dropbox
+	[ ! -d "$HOME/.local/share/vscode" ] && mkdir -m 700 -pv "$HOME"/.local/share/vscode
+
+	printf "\033[38;36m%s \033[0m\n" "Symlinking \$HOME/.vscode to \$HOME/.local/share"
+	[ ! -h "$HOME/.vscode" ] && ln -fsv "$HOME"/.local/share/vscode "$HOME"/.vscode
+	printf "%b" "Changing permissions to /.vscode: " && chmod -v 700 "$HOME"/.vscode
+	printf "\n"
+	printf "\033[38;36m%s \033[0m\n" "Symlinking \$HOME/.dropbox to \$HOME/.local/share"
+	[ ! -h "$HOME/.dropbox" ] && ln -fsv "$HOME"/.local/share/dropbox "$HOME"/.dropbox
+	printf "%b" "Changing permissions to /.dropbox: " && chmod -v 700 "$HOME"/.dropbox
+	printf "\n"
+	printf "\033[38;36m%s \033[0m\n" "Symlinking \$HOME/.ssh to \$HOME/.local/share/ssh"
+	[ ! -h "$HOME/.ssh" ] && ln -fsv "$HOME"/.local/share/ssh "$HOME"/.ssh
+	printf "%b" "Changing permissions to /.ssh: " && chmod -v 700 "$HOME"/.ssh
+	echo
+
+	printf "\033[38;34m%s \033[0m\n" "Verifying XDG_CONFIG_HOME = /etc"
+	[ ! -d "$HOME/.etc" ] && mkdir -m 700 -pv "$HOME"/.etc
+	[ ! -d "$HOME/.etc/shell" ] && mkdir -pv "$HOME"/.etc/shell
+
+	printf "\033[38;36m%s \033[0m\n" "Symlinking \$HOME/.etc to \$HOME/.config"
+	[ ! -h "$HOME/.config" ] && ln -fsv "$HOME"/.etc "$HOME"/.config
+	printf "%b" "Changing permissions to /.config: " && chmod -v 700 "$HOME"/.config
+	echo
+
+	printf "\033[38;34m%s \033[0m"        "Verifying XDG_STATE_HOME = /var/lib"
+	printf "\033[38;34m%s \033[0m\n"          "and XDG_CACHE_HOME = /var/cache"
+	[ ! -d "$HOME/.var" ] && mkdir -m 700 -pv "$HOME"/.var
+	[ ! -d "$HOME/.var/lib" ] && mkdir -m 700 -pv "$HOME"/.var/lib
+	[ ! -d "$HOME/.var/lib/bash" ] && mkdir -pv "$HOME"/.var/lib/bash
+	[ ! -d "$HOME/.var/lib/zsh" ] && mkdir -pv "$HOME"/.var/lib/zsh
+	[ ! -d "$HOME/.var/cache" ] && mkdir -m 700 -pv "$HOME"/.var/cache
+	[ ! -d "$HOME/.var/cache/bash" ] && mkdir -pv "$HOME"/.var/cache/bash
+	[ ! -d "$HOME/.var/cache/zsh" ] && mkdir -pv "$HOME"/.var/cache/zsh
+	[ ! -d "$HOME/.var/cache/shelldebug" ] && mkdir -pv "$HOME"/.var/cache/shelldebug
+
+	printf "\033[38;36m%s \033[0m"          "Symlinking \$HOME/.var/lib to"
+	printf "\033[38;36m%s \033[0m\n"        "\$HOME/.local/state & \$HOME/.state"
+	[ ! -h "$HOME/.local/state" ] && ln -fsv "$HOME"/.var/lib "$HOME"/.local/state
+	[ ! -h "$HOME/.state" ] && ln -fsv "$HOME"/.var/lib "$HOME"/.state
+	printf "%b" "Changing permissions to /.state: " && chmod -v 700 "$HOME"/.state
+	echo
+
+	printf "\033[38;36m%s \033[0m\n" "Symlinking \$HOME/.var/cache to \$HOME/.cache"
+	[ ! -h "$HOME/.cache" ] && ln -fsv "$HOME"/.var/cache "$HOME"/.cache
+	printf "%b" "Changing permissions to /.cache: " && chmod -v 700 "$HOME"/.cache
+	echo
+
+	printf "\033[38;34m%s \033[0m"              "Verifying XDG_OPT_HOME = /opt"
+	[ ! -d "$HOME/.opt" ] && mkdir -m 700 -pv "$HOME"/.opt
+	echo
+
+	chmod -v "${oldDirPerms}" "$HOME"
+}
+
+
+
+
+################################################################################
+
+# 1 <---------------------------------------------------------------------------
+# linkShellFiles -
+#     Options: No input
+# Description: Symlink directly the shell files needed in their respective folders
+#              in $XDG_CONFIG_HOME (Works only for zsh and bash)
+#
+# 2 <---------------------------------------------------------------------------
+#    linkZshrc <zshrc_index>
+#     Options: * The index assigned for the present zshrcs in the $DOTFILES/files/
+#                home/config/zsh folder
+#              * If no input detected: the function will make you choose one
+# Description: Symlink one zshrc in the $DOTFILES/files/home/config/zsh folder to
+#              $ZDOTDIR
+#
+# 3 <---------------------------------------------------------------------------
+#  changeZshrc <new_main_zshrc>||[nothing: have different effects]
+#     Options: * Filename of a zshrc present inside $ZDOTDIR to be set as the
+#                main rc file
+#              * If no input: outputs which zshrc is currently running if there
+#                is one or it will ask to choose one to be used as current zshrc
+#                if there is no one.
+# Description: This function compares the zshrcs inside $DOTFILES/zsh to the ones
+#              inside $ZDOTDIR to correctly guess what is the main zshrc being
+#              used so the user can choose another variant available to be the
+#              new main zshrc
+#
+
+linkShellFiles() \
+{
+	subopt "Symlinking Shell files to their respective ~/.config/<shell> folders..."
+
+	if [ ! -w "$HOME" ]; then
+		echo; printf "%b" "Changing \$HOME permissions: " && chmod -v 751 "$HOME"
+	fi
+	echo
+
+	ZDOTDIR="${ZDOTDIR:-$HOME/.config/zsh}"
+	BASHDOTDIR="${BASHDOTDIR:-$HOME/.config/bash}"
+	SHELL_HOME="${SHELL_HOME:-$HOME/.config/shell}"
+
+	[ ! -d "$ZDOTDIR" ] && mkdir -pv "$ZDOTDIR"
+	[ ! -d "$BASHDOTDIR" ] && mkdir -pv "$BASHDOTDIR"
+	[ ! -d "$SHELL_HOME" ] && mkdir -pv "$SHELL_HOME"
+	# -----------------------------------------------------------------------------------------------
+
+	while IFS= read -r -d '' zfolders;
+	do
+		# echo "$zfolders" # "$DOTFILES/home/config/zsh/<folder1>/<folderN>/";
+		zfoldersPath="$(echo "$zfolders" | \
+			awk -v a="$DOTFILES/home/config/zsh//" \
+			'{len=length(a)}{print substr($0,len)}')"
+		# echo "$zfoldersPath" # "/<folder1>/<folderN>/";
+
+		[ ! -d "$ZDOTDIR/$zfoldersPath" ] && mkdir -pv "$ZDOTDIR/$zfoldersPath"
+	done \
+	< <(find "$DOTFILES/home/config/zsh" -type d -print0)
+
+	while IFS= read -r -d '' zfiles;
+	do
+		case "$zfiles" in
+			"."*) continue ;;
+		esac
+
+		# echo "$zfiles" # "$DOTFILES/home/config/zsh/<folder1>/<folderN>/<file>";
+		zfilesPath="$(echo "$zfiles" | \
+			awk -v a="$DOTFILES/home/config/zsh//" \
+			'{len=length(a)}{print substr($0,len)}')"
+		# echo "$zfilesPath" # "/<folder1>/<folder2>/<file>";
+
+		ln -fsv "$zfiles" "$ZDOTDIR/$zfilesPath"
+	done \
+	< <(find "$DOTFILES/home/config/zsh" -type f -print0)
+
+	[ -f "$ZDOTDIR/zshenv" ] && mv -v "$ZDOTDIR/zshenv" "$ZDOTDIR/.zshenv"
+	[ -f "$ZDOTDIR/zprofile" ] && mv -v "$ZDOTDIR/zprofile" "$ZDOTDIR/.zprofile"
+	[ -f "$ZDOTDIR/zshrc" ] && mv -v "$ZDOTDIR/zshrc" "$ZDOTDIR/.zshrc"
+	[ -f "$ZDOTDIR/zlogin" ] && mv -v "$ZDOTDIR/zlogin" "$ZDOTDIR/.zlogin"
+	# -----------------------------------------------------------------------------------------------
+
+	while IFS= read -r -d '' bthemes;
+	do
+		case "$bthemes" in
+			"."*) continue ;;
+		esac
+		[ ! -d "$BASHDOTDIR/themes" ] && mkdir -pv "$BASHDOTDIR/themes"
+		ln -fsv "$bthemes" "$BASHDOTDIR/themes"
+	done \
+	< <(find "$DOTFILES/home/config/bash/themes" -type f -print0)
+
+	while IFS= read -r -d '' brc;
+	do
+		ln -fsv "$brc" "$HOME/.$(basename "$brc")"
+		printf "%b" "Changing permissions: " && chmod -v 700 "$HOME/.$(basename "$brc")"
+	done \
+	< <(find "$DOTFILES/home/config/bash" -name "bash*" -type f -print0)
+	# -----------------------------------------------------------------------------------------------
+
+	while IFS= read -r -d '' shllfiles;
+	do
+		case "$shllfiles" in
+			"."*) continue ;;
+		esac
+		# echo "$shllfiles" # "$DOTFILES/home/config/shell/<folder1>/<folderN>/<file>";
+		shllfilesPath="$(echo "$shllfiles" | \
+			awk -v a="$DOTFILES/home/config/shell//" \
+			'{len=length(a)}{print substr($0,len)}')"
+		# echo "$shllfilesPath" # "/<folder1>/<folder2>/<file>";
+
+		if [ ! -d "$SHELL_HOME/$(dirname "$shllfilesPath")" ];
+		then
+			mkdir -m 700 -pv "$SHELL_HOME/$(dirname "$shllfilesPath")"
+		fi
+		ln -fsv "$shllfiles" "$SHELL_HOME/$shllfilesPath"
+	done \
+	< <(find "$DOTFILES/home/config/shell" -type f -print0)
+	# -----------------------------------------------------------------------------------------------
+
+
+	if [ -w "$HOME" ]; then
+		echo; printf "%b" "Defending \$HOME: " && chmod -v 551 "$HOME"
+	fi
+	echo
+}
+
+linkZshrc() \
+{
+	declare -a zshrcsFound=()
+
+	ZDOTDIR="${ZDOTDIR:-$HOME/.config/zsh}"
+
+	while IFS= read -r -d '' zrc; do
+		zshrcsFound+=("$zrc")
+	done < <(find "$DOTFILES/home/config/zsh" -maxdepth 3 -name "*.zshrc" -type f -print0)
+
+	if [ -f "$DOTFILES/home/config/zsh/zshrc" ]
+	then
+		zshrcsFound+=("default.zshrc")
+	fi
+
+	if [ "$#" -eq 1 ] && [ "$1" -le "${#zshrcsFound[@]}" ]; then
+		choosedZrc="${zshrcsFound[$1]}"
+		zshrcName="${zshrcsFound[$1]##*/}"
+	else
+		echo
+		PS3='Choose the zshrc to link: '
+		select opt in "${zshrcsFound[@]}"
+		do
+			choosedZrc="$opt"
+			zshrcName="${opt##*/}"
+			break
+		done
+	fi
+
+	case $zshrcName in
+		"default.zshrc") ln -fsv "$choosedZrc" "$ZDOTDIR/.zshrc" ;;
+		*) ln -fsv "$choosedZrc" "$ZDOTDIR/configs/$zshrcName" ;;
+	esac
+}
+
+changeZshrc() \
+{
+	local newRc="$1"
+	local currentRc
+
+	local -a dotsZrcsFound
+	local -a zdirZrcsFound
+
+	local dotsZrcPath
+	local dotsZrcFile
+	local matched
+
+	local zdirZrcPath
+	local zdirZrcFile
+	local currentZshrc
+
+	local resp
+	local opt
+
+	## Halt if more than one argument
+	if [ "$#" -gt 1 ]; then
+		printf "%b" "\n\033[38;31mError: you must enter only one zshrc" \
+		"inside \$ZDOTDIR!\033[0m\n\n"
+		return 1
+	fi
+
+
+	## Get all the available Zshrc files variants of my Dotfiles
+	while IFS= read -r -d '' dotsZrcPath;
+	do
+		dotsZrcFile="$(basename -- "$dotsZrcPath")"
+		dotsZrcsFound+=("$dotsZrcFile")
+	done < \
+	<(find "$DOTFILES/home/config/zsh" -maxdepth 3 -name "*.zshrc" -type f -print0)
+
+	if [ -f "$DOTFILES/home/config/zsh/zshrc" ]
+	then
+		dotsZrcsFound+=("default.zshrc")
+	fi
+
+	## Get all the Zshrc files inside $ZDOTDIR except the current one
+	## By doing this, later, the comparison will gives us the current one
+	while IFS= read -r -d '' zdirZrcPath; do
+		zdirZrcFile="$(basename -- "$zdirZrcPath")"
+		currentZshrc="$(echo "$zdirZrcFile" | perl -pe 's/^\.zshrc$//gm')"
+
+		if [ -z "$currentZshrc" ];then
+			zdirZrcFile=
+		fi
+		if [ -n "$zdirZrcFile" ];then
+			zdirZrcsFound+=("$zdirZrcFile")
+		fi
+	done < \
+	<(find "$ZDOTDIR" -maxdepth 2 -name "*.zshrc" -type l -print0)
+
+
+	# { echo "${dotsZrcsFound[@]}" | tr ' ' '\n' | sort | tr "\n" " " }
+	# echo
+	# { echo "${zdirZrcsFound[@]}" | tr ' ' '\n' | sort | tr "\n" " " }
+	# echo
+
+
+	## Compare both arrays to pick the current Zshrc
+	if [ "${#dotsZrcsFound[@]}" -gt 0 ] && [ "${#zdirZrcsFound[@]}" -gt 0 ]; then
+		currentRc="$(echo "${zdirZrcsFound[@]}" "${dotsZrcsFound[@]}" | tr ' ' '\n' | sort | uniq -u)"
+	else
+		printf "%b" "\n\033[38;31mError: one or both arrays are empty!\n\n"
+		return 1
+	fi
+
+
+	## If zero args are input but there is a .zshrc present, just show the current rc
+	## Else, asks user to choose a *.zshrc  from the dir as the current rc
+	if [ "$#" -eq 0 ] && [ -r "$ZDOTDIR/.zshrc" ]; then
+		printf "%b" "\n\033[38;34mZshrcs present in $ZDOTDIR:\033[0m\n"
+		printf ' * %s\n' "${zdirZrcsFound[@]}"
+
+		printf "%b" "\n\033[38;32mThe current zshrc should be: \033[38;33m" \
+		"$currentRc\033[0m\n"
+
+		printf "%b" "\n\033[38;36mIf you want to change the current Zshrc, " \
+		"then just run again\nthis function as following: 'changeZshrc " \
+		"<zshrc_filename>'\033[0m\n\n"
+		return
+
+	elif [ ! -r "$ZDOTDIR/.zshrc" ]; then
+		printf "%b" "\n\033[38;33mWarning: aparently a .zshrc is not being used!\033[0m\n"
+		printf "\033[38;34m--> Do you want to set one as the current .zshrc? [Y/n]: \033[0m"
+		read -r resp
+		case $resp in
+			y|Y|yes|Yes|"")
+				PS3='Choose the zshrc to use: '
+				select opt in "${zdirZrcsFound[@]}"
+				do
+					printf "\n\033[38;32mSetting \033[38;33m%s\033[38;32m as the main rc\033[0m\n\n" "$opt"
+					mv -v "$ZDOTDIR/$opt" "$ZDOTDIR/.zshrc" 1>/dev/null
+					unset PS3
+					return
+				done
+			;;
+			n|N|no|No|"skip")
+				printf "%b" "\n\033[38;33mHalting! Goodbye...\033[0m\n\n"
+			;;
+			*)
+				error "\n\033[38;31mInvalid choice! Aborting...\033[0m\n\n"
+				echo; return 1
+			;;
+		esac
+		return
+	fi
+
+
+	## Do the stuff...
+	if [ "$currentRc" != "$newRc.zshrc" ];
+	then
+		toBeNewZrc="$(find "$ZDOTDIR" -name "${newRc}.zshrc" -type l -print0)"
+
+		if [ -r "$toBeNewZrc" ];
+		then
+			mv -v "$ZDOTDIR/.zshrc" "$ZDOTDIR/configs/$currentRc"
+
+			mv -v "$toBeNewZrc" "$ZDOTDIR/.zshrc" || {
+				printf "\n\033[38;31mError: %s.zshrc couldn't be set!\033[0m\n" "$newRc/$(basename "$toBeNewZrc")"
+				printf "\033[38;33mReturning to use $currentRc again!"
+				mv -v "$ZDOTDIR/$currentRc" "$ZDOTDIR/.zshrc"
+				return 1
+			}
+
+			printf "\n\033[38;32mNow using \033[38;33m%s.zshrc \033[38;32minstead of \033[38;33m%s\033[0m\n\n" "$newRc" "$currentRc"
+		else
+			printf "\n\033[38;31mError: %s.zshrc doesn't exist!\033[0m\n\n" "$newRc"
+			return 1
+		fi
+	## If current.zshrc is equal to the one you want to use, that means it...
+	else
+		printf "\n\033[38;31mError: %s is already being used!\033[0m\n\n" "$currentRc"
+		return 1
+	fi
+}
+
+
+
+
+################################################################################
+
+# 1 <---------------------------------------------------------------------------
+# removeMetadata -
+#     Options: No input
+# Description: Remove any metadata present in every file at the working dir.
+#
+# 2 <---------------------------------------------------------------------------
+# removeMacShit <max_depth_of_recursion> <full_path>
+#     Options: Any depth of recursion
+#              Full path to be cleaned
+# Description: Remove any Mac-related files (DS_Stores and ._files) present at
+#              the path.
+#
+# 3 <---------------------------------------------------------------------------
+# removeShellCache <history_flag> <sessions_flag> <timestamps_flag>
+#     Options: Shell command historyflag
+#              Shell sessions file flag
+#              Shell timestamps flag
+# Description: Remove any Shell-state & cache related files (history, .session, etc).
+#
+
+removeMetadata() \
+{
+	local fileWitMetadata
+	while IFS= read -r -d '' fileWitMetadata; do
+		# ttr -l "$fileWitMetadata"
+		xattr -c "$fileWitMetadata"
+	done < <(find . -not -path "./.git/*" -type f -print0)
+
+	local folderWitMetadata
+	while IFS= read -r -d '' folderWitMetadata; do
+		# ttr -l "$folderWitMetadata"
+		xattr -c "$fileWitMetadata"
+	done < <(find . -not -path "./.git/*" -type d -print0)
+}
+
+removeMacShit() \
+{
+	if command -v trash >/dev/null 2>&1; then
+		if [ "$#" -eq 2 ] && [ "$1" -gt 0 ] && [ -d "$2" ]; then
+			local dstore
+			while IFS= read -r -d '' dstore; do
+				trash "$dstore"
+			done < <(find "$2" -maxdepth "$1" -name "*.DS_Store" -print0)
+
+			local hiddenUn
+			while IFS= read -r -d '' hiddenUn; do
+				trash "$hiddenUn"
+			done < <(find "$2" -maxdepth "$1" -name "._*" -print0)
+		else
+			printf "%b" "\n\033[38;31mError: missing or invalid argument!" \
+			"\033[38;36m Some examples:\033[0m\n<removeMacShit 10 .>" \
+			"                " "for Working Dir\n" \
+			"<removeMacShit 4 \"\$HOME/Documents\"> for a different path\n\n"
+		fi
+	else
+		printf "%b" "\n\033[38;31mError: trash command not found!\033[0m\n\n"
+		return 1
+	fi
+}
+
+removeShellCache() \
+{
+	local thisTrash
+
+	case "$1" in
+		"hists")
+			local YES_HISTS=true
+		;;
+		"seshs")
+			local YES_SESHS=true
+		;;
+		"tmstmps")
+			local YES_TMSTMPS=true
+		;;
+		""|"all")
+			local YES_ALL=true
+		;;
+		*)
+			echo "Error: Invalid arguments! Args are: 'hists', 'seshs' and 'all'"
+			echo; return
+		;;
+	esac
+
+	if [ -n "$YES_HISTS" ]; then
+		local histfile
+		while IFS= read -r -d '' histfile; do
+			printf "\033[38;31m%s\033[0m" "Moving to Trash: " && trash "$histfile"
+			echo
+		done < <(find -L "$HOME/.state" -maxdepth 3 -name "history" -type f -print0 2>/dev/null)
+	fi
+
+	if [ -n "$YES_SESHS" ]; then
+		local seshs
+		while IFS= read -r -d '' seshs; do
+			printf "\033[38;31m%s\033[0m" "Moving to Trash: " && trash "$seshs"
+			echo
+		done < <(find -L "$HOME/.cache" -maxdepth 3 -name "*.session" -type f -print0 2>/dev/null)
+	fi
+
+	if [ -n "$YES_TMSTMPS" ]; then
+		local timestamps
+		while IFS= read -r -d '' timestamps; do
+			printf "\033[38;31m%s\033[0m" "Moving to Trash: " && trash "$timestamps"
+			echo
+		done < <(find -L "$HOME/.cache" -maxdepth 3 -name "*timestamp" -type f -print0 2>/dev/null)
+	fi
+
+	if [ -n "$YES_ALL" ]; then
+		local fil
+		while IFS= read -r -d '' fil; do
+			printf "\033[38;31m%s\033[0m" "Moving to Trash: " && trash "$fil"
+			echo
+		done < <(find -L "$HOME/.cache" -type f -print0 2>/dev/null)
+	fi
+}
+
+
+
+
+################################################################################
+
+# 1 <---------------------------------------------------------------------------
+# createMacOSInstaller <installer_app_path> <external_drive_path>
+#     Options: Path to the installer's .app
+#              Path of the external drive
+# Description: Simplifies the creation of macOS bootable drives
+#
+# 2 <---------------------------------------------------------------------------
+# verifyMacOSProgram <app_path>
+#     Options: Path to the .app
+# Description: Simplifies signature checking of macOS apps
+#
+
+createMacOSInstaller() \
+{
+	if [ "$#" -le 1 ]; then
+		printf "%b" "\n\033[38;31mError: you must enter the path of the installer app " \
+		"(just to the .app) and the path to the external drive to be used!\033[0m Example:" \
+		"<createMacOSInstaller \"/Apps/Install_macOS_version.app\" \"/Volumes/drive_name\">\n\n"
+		return
+	fi
+
+	if [ ! -d "$1" ]; then
+		printf "%b" "\n\033[38;31mError: Invalid installer .app path!\033[0m\n\n"
+		return
+	fi
+	if [ ! -f "$1"/Contents/Resources/createinstallmedia ]; then
+		printf "%b" "\n\033[38;31mError: createinstallmedia not found!\033[0m\n\n"
+		return
+	fi
+
+	if [ ! -d "$2" ]; then
+		printf "%b" "\n\033[38;31mError: Invalid external drive path!\033[0m\n\n"
+		return
+	fi
+
+	case $(uname -r) in
+		20*|19*|18*|17*)
+			sudo "$1"/Contents/Resources/createinstallmedia --volume "$2" #--nointeraction
+		;;
+		16*|15*|14*|13*|12*|11*)
+			sudo "$1"/Contents/Resources/createinstallmedia --volume "$2" --applicationpath "$1" #--nointeraction
+		;;
+	esac
+}
+
+verifyMacOSProgram() \
+{
+	if [ "$#" -lt 1 ]; then
+		# echo "$#"
+		printf "%b" "\n\033[38;31mError: you must enter a valid path of the " \
+		"program (.app or .pkg) to be verified!\033[0m Example:\n<verifyMacO" \
+		"SProgram \"/Path/To/macOS_program.[app|pkg]\">\n\n"
+		return
+	fi
+
+	if [ ! -d "$1" ]; then
+		printf "%b" "\n\033[38;31mError: Invalid path/program! -> $1\033[0m\n\n"
+		return
+	fi
+
+	pkgutil --check-signature $*
+
+	codesign -dvv $*
+}
+
+
+
+
+################################################################################
+
+# 1 <---------------------------------------------------------------------------
+# enableService <program_to_enable>
+#      Option: Program name inside of the runit prefix (/etc/sv)
+# Description: Simplifies Runit tasks
+#
+
+runitHelper() \
+{
+	case "$1" in
+		"-h"|"--help")
+			echo "OPTIONS: [en <program>][dis <program>]"
+		;;
+		"en"|"enable")
+			if [ -d "/etc/sv/$2" ];
+			then
+				ln -s /etc/sv/"$2" /var/service/"$2"
+			else
+				printf "%b" "\n\033[38;31mError: Invalid path!\033[0m\n\n"
+				return
+			fi
+		;;
+		"dis"|"disable")
+			if [ -d "/etc/sv/$2" ];
+			then
+				rm -v /var/service/"$2"
+			else
+				printf "%b" "\n\033[38;31mError: Invalid path!\033[0m\n\n"
+				return
+			fi
+		;;
+		*)
+			printf "%b" "\n\033[38;31mError: Invalid option!\033[0m\n\n"
+			return
+		;;
+	esac
+}
+
+
+
+################################################################################
+
+echo "Sourced: ~/.functions"
+
+case "$(ps -o args= -p $$ | egrep -m 1 -o '\b\w{0,6}sh|koi')" in
+	# "bash") true ;; # Unnecessary
+	"zsh")
+		if [[ ! -o login ]]; then
+			[[ -o interactive ]] && echo
+		fi
+	;;
+	*) true ;;
+esac

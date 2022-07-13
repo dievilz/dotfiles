@@ -1,0 +1,210 @@
+#
+# I3 CONFIG FILE (V4)
+# (PLEASE SEE https://13wm.org/docs/userguide.html FOR A COMPLETE REFERENCE!)
+#
+
+set $mod Mod4
+
+gaps inner 15
+gaps outer 6
+
+# FONT FOR WINDOW TITLES. WILL ALSO BE USED BY THE BAR UNLESS
+# A DIFFERENT FONT IS USED IN THE BAR {} BLOCK BELOW.
+font pango:monospace 8
+# font pango:System San Francisco Display 9
+
+# THIS FONT IS WIDELY INSTALLED, PROVIDES LOTS OF UNICODE GLYPHS, RIGHT-TO-LEFT
+# TEXT RENDERING AND SCALABILITY ON RETINA/HIDPI DISPLAYS (THANKS TO PANGO).
+# font pango:DejaVu Sans Mono 8
+
+# USE MOUSE+$MOD TO DRAG FLOATING WINDOWS TO THEIR WANTED POSITION
+floating_modifier $mod
+
+# LOCKER PROGRAM
+bindsym $mod+l exec i3lock
+
+# START A TERMINAL
+# bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+Return exec konsole
+# bindsym $mod+Return exec terminator
+
+# KILL FOCUSED WINDOW
+bindsym $mod+q kill
+
+# START DMENU (A PROGRAM LAUNCHER)
+# bindsym $mod+d exec dmenu_run
+# THERE ALSO IS THE (NEW) I3-DMENU-DESKTOP WHICH ONLY DISPLAYS APPLICATIONS
+# SHIPPING A .DESKTOP FILE. IT IS A WRAPPER AROUND DMENU, SO YOU NEED THAT
+# INSTALLED.
+bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
+
+# CHANGE FOCUS
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# MOVE FOCUSED WINDOW
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# MOVE TO THE PREVIOUS OR NEXT WORKSPACE
+bindsym $mod+Ctrl+Left workspace prev
+bindsym $mod+Ctrl+Right workspace next
+
+bindsym $mod+h split h            # SPLIT IN HORIZONTAL ORIENTATION
+bindsym $mod+v split v            # SPLIT IN VERTICAL ORIENTATION
+bindsym $mod+f fullscreen toggle  # ENTER FULLSCREEN MODE FOR THE FOCUSED CONTAINER
+
+# CHANGE CONTAINER LAYOUT (STACKED, TABBED, TOGGLE SPLIT)
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+bindsym $mod+Shift+space floating toggle  # TOGGLE TILING / FLOATING
+bindsym $mod+space focus mode_toggle      # CHANGE FOCUS BETWEEN TILING / FLOATING WINDOWS
+bindsym $mod+a focus parent               # FOCUS THE PARENT CONTAINER
+
+# DEFINE NAMES FOR DEFAULT WORKSPACES FOR WHICH WE CONFIGURE KEY BINDINGS LATER ON.
+# WE USE VARIABLES TO AVOID REPEATING THE NAMES IN MULTIPLE PLACES.
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "5"
+set $ws6 "6"
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9"
+set $ws10 "10"
+
+# SWITCH TO WORKSPACE
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
+bindsym $mod+7 workspace $ws7
+bindsym $mod+8 workspace $ws8
+bindsym $mod+9 workspace $ws9
+bindsym $mod+0 workspace $ws10
+
+# MOVE FOCUSED CONTAINER TO WORKSPACE
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6
+bindsym $mod+Shift+7 move container to workspace $ws7
+bindsym $mod+Shift+8 move container to workspace $ws8
+bindsym $mod+Shift+9 move container to workspace $ws9
+bindsym $mod+Shift+0 move container to workspace $ws10
+
+# RELOAD THE CONFIGURATION FILE
+bindsym $mod+Shift+c reload
+
+# RESTART i3 INPLACE (PRESERVES YOUR LAYOUT/SESSION, CAN BE USED TO UPGRADE i3)
+bindsym $mod+Shift+r restart
+
+# EXIT i3 (LOGS YOU OUT OF YOUR X SESSION)
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'Con que ya te quieres largar hijoeputa...' -B 'Smn, sacame alv prro' 'i3-msg exit'"
+
+# RESIZE WINDOW (YOU CAN ALSO USE THE MOUSE FOR THAT)
+mode "resize" {
+        # THESE BINDINGS TRIGGER AS SOON AS YOU ENTER THE RESIZE MODE
+
+        # PRESSING LEFT WILL SHRINK THE WINDOW’S WIDTH.
+        # PRESSING RIGHT WILL GROW THE WINDOW’S WIDTH.
+        # PRESSING UP WILL SHRINK THE WINDOW’S HEIGHT.
+        # PRESSING DOWN WILL GROW THE WINDOW’S HEIGHT.
+        bindsym j resize shrink width 10 px or 10 ppt
+        bindsym k resize grow height 10 px or 10 ppt
+        bindsym l resize shrink height 10 px or 10 ppt
+        bindsym ntilde resize grow width 10 px or 10 ppt
+
+        # SAME BINDINGS, BUT FOR THE ARROW KEYS
+        bindsym Left resize shrink width 10 px or 10 ppt
+        bindsym Down resize grow height 10 px or 10 ppt
+        bindsym Up resize shrink height 10 px or 10 ppt
+        bindsym Right resize grow width 10 px or 10 ppt
+
+        # BACK TO NORMAL: ENTER OR ESCAPE OR $MOD+R
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+        bindsym $mod+r mode "default"
+}
+
+bindsym $mod+r mode "resize"
+
+# START I3BAR TO DISPLAY A WORKSPACE BAR (PLUS THE SYSTEM INFORMATION I3STATUS
+# FINDS OUT, IF AVAILABLE)
+bar {
+    # status_command i3status
+    status_command i3pystatus
+    tray_output primary
+}
+
+
+###################################### CUSTOM CONFIGURATION #######################################
+
+# IF YOU DON’T MANUALLY SET YOUR WALLPAPER, IT WILL BE ANYTHING BUT THE RIGHT ONE.
+exec_always --no-startup-id feh --randomize --bg-fill --no-fehbg ~/Wallpapers/Pictures/*
+
+# LOAD APPS: POLYBAR, COMPTON, CONKY
+exec_always --no-startup-id ~/.config/polybar/launch.sh
+
+# exec_always --no-startup-id compton
+
+# exec_always --no-startup-id conky
+
+# exec_always xmodmap -e "pointer = 3 2 1" # INVERT MOUSE LAYOUT
+exec_always xmodmap -e "pointer = 1 2 3"   # NORMAL MOUSE LAYOUT
+
+
+# YOU NEED TO BIND SOME KEYS LIKE VOLUME AND BRIGHTNESS
+bindsym XF86AudioRaiseVolume exec amixer -D pulse sset Master 5%+   # INCREASE SOUND VOLUME
+bindsym XF86AudioLowerVolume exec amixer -D pulse sset Master 5%-   # DECREASE SOUND VOLUME
+bindsym XF86AudioMute exec amixer -D pulse sset Master -- 0%        # MUTE SOUND
+
+bindsym XF86MonBrightnessUp exec xbacklight + 10                    # INCREASE SCREEN BRIGHTNESS
+bindsym XF86MonBrightnessDown exec xbacklight - 10                  # DECREASE SCREEN BRIGHTNESS
+
+# I USE SPOTIFY AS MUSIC PLAYER, SO I HAD TO SETUP PLAY/PAUSE KEYS TOO
+bindsym XF86AudioPrev exec dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous
+bindsym XF86AudioPlay exec dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause
+bindsym XF86AudioNext exec dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next
+
+
+
+
+
+
+
+###################################### UNUSED CONFIGURATION #######################################
+
+# # I USE THOSE COLORS AT BAR AND WINDOW COLOR SETTINGS
+# set $bg-color            #2f343f
+# set $inactive-bg-color   #2f343f
+# set $text-color          #f3f4f5
+# set $inactive-text-color #676E7D
+# set $urgent-bg-color     #E53935
+
+#     colors {
+#         background $bg-color
+#         separator #757575
+#         #                  border             background         text
+#         focused_workspace  $bg-color          $bg-color          $text-color
+#         inactive_workspace $inactive-bg-color $inactive-bg-color $inactive-text-color
+#         urgent_workspace   $urgent-bg-color   $urgent-bg-color   $text-color
+#     }
+
+# # WINDOW COLORS
+# #                       border              background          text                 indicator
+# client.focused          $bg-color           $bg-color           $text-color          #00ff00
+# client.unfocused        $inactive-bg-color  $inactive-bg-color  $inactive-text-color #00ff00
+# client.focused_inactive $inactive-bg-color  $inactive-bg-color  $inactive-text-color #00ff00
+# client.urgent           $urgent-bg-color    $urgent-bg-color    $text-color          #00ff00

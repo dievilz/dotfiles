@@ -1,0 +1,183 @@
+{
+  "actions" : [
+
+  ],
+  "config" : {
+    "startShortcut" : {
+      "version" : 1,
+      "representedClassName" : "DejalData",
+      "length" : 0
+    },
+    "labelAsPie" : 0,
+    "postponeMinutes1" : 1,
+    "otherBackground" : {
+      "green" : 0,
+      "red" : 0,
+      "representedClassName" : "DejalColor",
+      "alpha" : 0.90000000000000002,
+      "blue" : 0,
+      "version" : 1
+    },
+    "dailySkipLimit" : 10,
+    "due" : 1,
+    "representedClassName" : "Config",
+    "postponeMinutes2" : 10,
+    "adjustment" : 2,
+    "skipForHigherPriority" : 0,
+    "themeBackgroundTransparency" : 0.90000000000000002,
+    "comments" : "",
+    "resetWhenFinishingHigherPriority" : 0,
+    "screenID" : 69733312,
+    "label" : {
+      "green" : 0.0071207880973815918,
+      "red" : 0.98624604940414429,
+      "representedClassName" : "DejalColor",
+      "alpha" : 1,
+      "blue" : 0.02743418887257576,
+      "version" : 1
+    },
+    "endingSeconds" : 1,
+    "version" : 6,
+    "resetWhenIdleInterval" : {
+      "usingRange" : 0,
+      "secondAmount" : 10,
+      "representedClassName" : "DejalInterval",
+      "firstAmount" : 10,
+      "units" : 1,
+      "version" : 1
+    },
+    "showPostpone2" : 0,
+    "deferDelaySeconds" : 15,
+    "durationInterval" : {
+      "usingRange" : 0,
+      "secondAmount" : 1,
+      "representedClassName" : "DejalInterval",
+      "firstAmount" : 10,
+      "units" : 2,
+      "version" : 1
+    },
+    "endEarlyInterval" : {
+      "usingRange" : 0,
+      "secondAmount" : 1,
+      "representedClassName" : "DejalInterval",
+      "firstAmount" : 30,
+      "units" : 0,
+      "version" : 1
+    },
+    "showDeferCounters" : 0,
+    "limitSkip" : 0,
+    "dailyPostponeLimit" : 3,
+    "exceptWeekdays" : "",
+    "deferDelay" : 0,
+    "themeBackground" : {
+      "green" : 0,
+      "red" : 0,
+      "representedClassName" : "DejalColor",
+      "alpha" : 0.90000000000000002,
+      "blue" : 0,
+      "version" : 1
+    },
+    "name" : "End of my Day! Get outta Here",
+    "skipForHigherPriorityInterval" : {
+      "usingRange" : 0,
+      "secondAmount" : 5,
+      "representedClassName" : "DejalInterval",
+      "firstAmount" : 5,
+      "units" : 1,
+      "version" : 1
+    },
+    "themeName" : "[BLANK]",
+    "otherBackgroundTransparency" : 0.90000000000000002,
+    "showSkip" : 0,
+    "identifier" : "C3D05E68-1B69-4D0D-A2D9-BA17F117FD8F",
+    "showEndEarly" : 1,
+    "availability" : 0,
+    "adjustmentMinutes" : 0,
+    "resetWhenIdle" : 0,
+    "frequencyInterval" : {
+      "usingRange" : 0,
+      "secondAmount" : 15,
+      "representedClassName" : "DejalInterval",
+      "firstAmount" : 1,
+      "units" : 2,
+      "version" : 1
+    },
+    "idle" : 0,
+    "limitPostpone" : 1,
+    "toTime" : {
+      "hour" : 17,
+      "second" : 0,
+      "representedClassName" : "DejalTime",
+      "minute" : 0,
+      "version" : 1
+    },
+    "dueAskInterval" : {
+      "usingRange" : 0,
+      "secondAmount" : 5,
+      "representedClassName" : "DejalInterval",
+      "firstAmount" : 5,
+      "units" : 1,
+      "version" : 1
+    },
+    "showPostpone1" : 1,
+    "beginningSeconds" : 1,
+    "fromTime" : {
+      "hour" : 8,
+      "second" : 0,
+      "representedClassName" : "DejalTime",
+      "minute" : 0,
+      "version" : 1
+    }
+  },
+  "state" : {
+    "todaySkipCount" : 0,
+    "lastPhase" : 6,
+    "todayPostponeCount" : 0,
+    "lastPreparing" : {
+      "version" : 1,
+      "representedClassName" : "DejalDate",
+      "string" : "2021-11-09T22:22:21Z"
+    },
+    "todayStartCount" : 0,
+    "nextDue" : {
+      "version" : 1,
+      "representedClassName" : "DejalDate",
+      "string" : "2021-12-08T21:00:00Z"
+    },
+    "totalStartCount" : 4,
+    "representedClassName" : "State",
+    "lastDone" : {
+      "version" : 1,
+      "representedClassName" : "DejalDate",
+      "string" : "0001-01-01T00:00:00Z"
+    },
+    "lastStarted" : {
+      "version" : 1,
+      "representedClassName" : "DejalDate",
+      "string" : "2021-11-09T22:22:22Z"
+    },
+    "version" : 2,
+    "lastAds" : {
+      "version" : 1,
+      "representedClassName" : "DejalDate",
+      "string" : "0001-01-01T00:00:00Z"
+    },
+    "totalPostponeCount" : 3,
+    "enabled" : 0,
+    "totalDoneCount" : 0,
+    "todayDuration" : 0,
+    "totalSkipCount" : 1,
+    "pausedUntil" : {
+      "version" : 1,
+      "representedClassName" : "DejalDate",
+      "string" : "2021-11-30T23:07:19Z"
+    },
+    "todayDoneCount" : 0,
+    "totalDuration" : 1018,
+    "lastDeferred" : {
+      "version" : 1,
+      "representedClassName" : "DejalDate",
+      "string" : "2021-11-09T22:32:22Z"
+    }
+  }
+}

@@ -1,0 +1,132 @@
+#############################################
+# dievilz' DEFAULT BASH RUN COMMANDS FILE #
+#############################################
+
+## If not running interactively, don't do anything
+[ -z "$PS1" ] && exit
+
+## Printing for debugging purposes
+echo "Sourced: ~/.bashrc"
+
+## macOS way of doing things smfh
+if [ "$(uname -s)" = "Darwin" ];
+then
+	## If the session is non-login interactive, /etc/profile will not be sourced,
+	## only /etc/bash.bashrc is supposed to be sourced. If for some reason /etc/
+	## profile or /etc/bash.bashrc are not sourced by the time Bash gets here,
+	## we just need to verify for the profile and source it...
+
+	## Forcefully, both of my /etc/profile and my /etc/bash.bashrc files will
+	## source each other if they detect one of them hasn't been sourced yet
+	## (if we are using macOS, of course)...
+	if [ -z "$ETCPROFILE_SOURCED" ];
+	then
+		[ -r "/etc/profile" ] && . /etc/profile
+	fi
+
+	## Anyway, if the session is login-interactive and my ~/.bash_profile is present,
+	## it will source this file, so we need to avoid a sourcing loop between both
+	## files: for that we just simply check for a different type of session.
+	# if [ "$SHELL_IS_LOGIN" = false ] && [ "$SHELL_IS_INTERACTIVE" = true ];
+	if ! shopt -q login_shell && [[ "$-" == *i* ]];
+	then
+		## ...Finally, a non-login interactive Bash shell sources only a ~/.bashrc
+		## and doesn't source any ~/.(profile, bash_profile or bash_login). So,
+		## because we need our env vars correctly exported in our Terminal sessions,
+		## we need to source my ~/.bash_profile. Refer to that file for further
+		## details.
+		if [ -z "$PROFILE_SOURCED" ];
+		then
+			[ -r "$HOME/.bash_profile" ] && . "$HOME/.bash_profile"
+		fi
+	fi
+fi
+
+
+################################### PLUGINS ####################################
+
+## My custom settings for generic Shell plugins
+if [ "${BASH_VERSINFO:-0}" -ge 4 ]; then
+	while IFS= read -r -d '' shllplugn;
+	do
+		[ -r "$shllplugn" ] && . "$shllplugn"
+	done \
+	< <(find "$SHELL_HOME/plugins" -name "*.plugin.sh" -type f -print0 2> /dev/null)
+fi
+
+
+################################### THEMES #####################################
+
+theme=$(jot -w %i -r 1 1 5+1)   # NumOfResults, Min, + (Max+1)
+theme=1
+# echo "$theme"
+case "$theme" in
+	"1")
+		[ -r "$BASHDOTDIR/themes/dievilz-default.theme.bash" ] \
+		&& . "$BASHDOTDIR/themes/dievilz-default.theme.bash"
+	;;
+esac
+unset theme
+
+
+############################## USER CONFIGURATION ##############################
+
+## Load the shell dotfiles:
+for homefile in "$HOME"/.{aliases,functions};
+do
+	[ -r "$homefile" ] && . "$homefile"
+done
+unset homefile
+
+
+if [ "$(uname -s)" = "GNU" ] || [ "$(uname -s)" = "Linux" ];
+then
+	setxkbmap -layout es # setxkbmap must be run as non-root and for a GUI
+fi
+
+
+## Composer at last because, y'know, PHP...  *yuck* xD
+# [ -s "$HOME"/Dev/Repos/php-version/php-version.sh ] \
+# && . "$HOME"/Dev/Repos/php-version/php-version.sh
+
+
+# php-version 7
+# nvm alias default 12.14.1 >/dev/null
+# # pyenv shell 3.8.1
+# chruby 2.7.0
+
+
+################################# COMPLETION ###################################
+
+## Add tab completion for many Bash commands
+if command -v brew >/dev/null 2>&1 && [ -f "$(brew --prefix)/share/bash-completion/bash_completion" ];
+then
+	. "$(brew --prefix)/share/bash-completion/bash_completion";
+
+elif [ -f "$(brew --prefix)/etc/bash_completion" ];
+then
+	. "$(brew --prefix)/etc/bash_completion";
+
+elif [ -f /etc/bash_completion ];
+then
+	. /etc/bash_completion;
+fi;
+
+## Add tab completion for SSH hostnames based on "$HOME".ssh/config, ignoring wildcards
+[ -r "$SSH_HOME/config" ] && complete -o "default" -o "nospace" -W "$(grep "^Host" "$SSH_HOME/config" | grep -v "[?*]" | cut -d " " -f2- | tr ' ' '\n')" scp sftp ssh;
+
+if [ "$(uname -s)" = "Darwin" ];
+then
+	## Add tab completion for `defaults read|write NSGlobalDomain`
+	## You could just use `-g` instead, but I like being explicit
+	complete -W "NSGlobalDomain" defaults;
+
+	## Add `killall` tab completion for common apps
+	complete -o "nospace" -W "Contacts Calendar Dock Finder Mail Safari iTunes SystemUIServer Terminal Twitter" killall;
+fi
+
+################################################################################
+
+
+## Remove PATH duplicated entries
+# PATH="$(perl -e 'print join(":", grep { not $seen{$_}++ } split(/:/, $ENV{PATH}))')"

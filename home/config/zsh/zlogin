@@ -1,0 +1,11 @@
+#
+# $ZDOTDIR/.zlogin  OR  ~/.zlogin
+#
+
+## Printing for debugging purposes if session is interactive
+[[ -o interactive ]] && echo "Sourced: \$ZDOTDIR/.zlogin"
+
+if [[ -o login ]];
+then
+	[ -r "$HOME/.login" ] && . "$HOME/.login"
+fi

@@ -1,0 +1,47 @@
+[
+	{
+		"class": "sidebar_label",
+		// "font.face": "Pragmata Pro Mono Regular"
+	},
+	{
+		"class": "sidebar_heading",
+		// "font.face": "Pragmata Pro Mono Regular",
+		"font.bold": false
+	},
+	{
+		"class": "tab_label",
+		// "font.face": "Pragmata Pro Mono Regular"
+	},
+	{
+		"class": "label_control",
+		// "font.face": "Pragmata Pro Mono Regular"
+	},
+	{
+		"class": "quick_panel_label",
+		// "font.face": "Pragmata Pro Mono Regular"
+	},
+	{
+		"class": "quick_panel_path_label",
+		// "font.face": "Pragmata Pro Mono Regular"
+	},
+
+
+
+	{
+		"class": "sidebar_label",
+		"parents": [{"class": "tree_row","attributes": ["expandable"]}],
+		"font.bold": false
+	},
+	{
+		"class": "sidebar_label",
+		"parents": [{"class": "tree_row", "attributes": ["expandable"]}],
+		"settings": ["bold_folder_labels"],
+		"font.bold": false
+	},
+	{
+		"class": "sidebar_label",
+		"parents": [{"class": "tree_row", "attributes": ["expanded"]}],
+		"settings": ["bold_folder_labels"],
+		"font.bold": false
+	},
+]
