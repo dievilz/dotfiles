@@ -1,0 +1,49 @@
+{
+    "DisplayServersList": true,
+    "NavigationTreeDefaultTabTable": "browse",
+    "NavigationTreeDefaultTabTable2": "structure",
+    "ShowStats": false,
+    "ShowDbStructureCharset": true,
+    "ShowDbStructureComment": true,
+    "ShowDbStructureCreation": true,
+    "ShowDbStructureLastUpdate": true,
+    "ShowDbStructureLastCheck": true,
+    "SaveCellsAtOnce": true,
+    "Export\/charset": "utf-8",
+    "Console\/AlwaysExpand": true,
+    "Console\/DarkTheme": true,
+    "Console\/Mode": "collapse",
+    "DefaultTransformations\/Substring": [
+        "0",
+        "all",
+        "\u2026"
+    ],
+    "DefaultTransformations\/External": [
+        "0",
+        "-f \/dev\/null -i -wrap -q",
+        "1",
+        "1"
+    ],
+    "DefaultTransformations\/DateFormat": [
+        "0",
+        "local",
+        "local"
+    ],
+    "DefaultTransformations\/Inline": {
+        "0": "100",
+        "1": "100",
+        "wrapper_link": null
+    },
+    "DefaultTransformations\/TextImageLink": [
+        "100",
+        "50",
+        "50"
+    ],
+    "Server\/hide_db": "(information_schema|performance_schema|phpmyadmin|mysql)",
+    "Server\/only_db": "",
+    "2fa": {
+        "type": "db",
+        "backend": "",
+        "settings": []
+    }
+}

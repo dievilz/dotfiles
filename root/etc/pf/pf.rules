@@ -1,0 +1,32 @@
+#
+# /etc/pf/pf.rules
+#
+
+################################################################################
+
+#
+# https://github.com/drduh/macOS-Security-&-Privacy/blob/master/README.md
+#
+
+wifi = "en0"
+ether = "en7"
+set block-policy drop
+set fingerprints "/etc/pf.os"
+set ruleset-optimization basic
+set skip on lo0
+scrub in all no-df
+table <blocklist> persist
+block in log
+block in log quick from no-route to any
+block log on $wifi from { <blocklist> } to any
+block log on $wifi from any to { <blocklist> }
+antispoof quick for { $wifi }
+pass out proto tcp from { $wifi } to any keep state
+pass out proto udp from { $wifi } to any keep state
+# pass out proto icmp from { $wifi } to any keep state
+
+## Applications and programs may resolve DNS using their own provided servers.
+## If dnscrypt-proxy is used, it is possible to disable all other, non-dnscrypt
+## DNS traffic with the following pf rules:
+# block drop quick on !lo0 proto udp from any to any port = 53
+# block drop quick on !lo0 proto tcp from any to any port = 53
