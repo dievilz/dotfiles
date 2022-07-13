@@ -32,10 +32,12 @@
 #  * feat:     A new feature
 #  * fix:      A bug fix
 #  * docs:     Documentation-only changes
-#  * style:    Text changes that do not affect the meaning of the code (white-spaces,
-#              formatting, missing semi-colons, typos, etc)
-#  * refactor: Code changes that improves readability/performance (neither fixes
-#              a bug nor adds a feature).
+#  * style:    Changes to the text Styling/Formatting - that do not affect the
+#              meaning of the code (white-spaces, comments, indentation, missing
+#              punctuation, typos, etc).
+#  * refactor: Changes to the code Composition/Organization - that improves
+#              readability/performance and neither fixes a bug nor adds a
+#              feature (changes to code blocks, functions, structures, etc).
 #  * test:     Adding missing tests or correcting existing ones
 #  * build:    Changes to the build/compilation/packaging process or auxiliary
 #              tools such as documentation generation or external dependencies
@@ -53,7 +55,7 @@
 #                 ---------- blank line -----------
 #                 Reverts 5b233b5a
 #
-#  * META example tags: #wip, #irrelevant, #style
+#  * Example Meta tags: #wip, #irrelevant, #style
 
 # <---------------------- <___2.SCOPE (optional)___> -------------------------->
 # Usually it is convenient to mention exactly which part of the code base changed.
