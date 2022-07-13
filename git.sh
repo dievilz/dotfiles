@@ -176,15 +176,15 @@ make_config_git() \
 		exportLog="${exportLog} ${default}"
 		git config --global alias.exportLog "${exportLog}"
 
-		git config --global alias.ammend "commit --amend"
+		git config --global alias.ammend "commit --amend "
 		git config --global alias.logv "log --stat"
 		git config --global alias.undoS "reset --soft HEAD~1"
 		git config --global alias.undo "reset HEAD~1"
-		git config --global alias.untrack "update-index --assume-unchanged"
+		git config --global alias.untrack "update-index --assume-unchanged "
 		git config --global alias.reup "!f(){ git remote add upstream $1};f"
-		git config --global alias.reupGH "!f(){ git remote add upstream git:github.com/$1/$2.git;};f"
+		git config --global alias.reupGH "!f(){ git remote add upstream git@github.com:$1/$2.git;};f"
 		git config --global alias.reorg "!f(){ git remote add origin $1};f"
-		git config --global alias.reorgGH "!f(){ git remote add origin git:github.com/$1/$2.git;};f"
+		git config --global alias.reorgGH "!f(){ git remote add origin git@github.com:$1/$2.git;};f"
 	##
 
 	git config --global color.ui always

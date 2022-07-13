@@ -399,9 +399,9 @@ dev_aliases() \
 	alias gundo='git reset HEAD~1'
 	alias guntrack='git update-index --assume-unchanged '
 	alias greup='"!f(){ git remote add upstream $1};f"'
-	alias greupGH='"!f(){ git remote add upstream https://github.com/$1/$2.git;};f"'
+	alias greupGH='"!f(){ git remote add upstream git@github.com:$1/$2.git;};f"'
 	alias greorg='"!f(){ git remote set-url origin $1};f"'
-	alias greorgGH='"!f(){ git remote set-url origin https://github.com/$1/$2.git;};f"'
+	alias greorgGH='"!f(){ git remote set-url origin git@github.com:$1/$2.git;};f"'
 
 	alias aliasesnpm='less "$SHELL_HOME/plugins/npm_custom.plugin.zsh'
 	alias realiasnpm='. "$SHELL_HOME/plugins/npm_custom.plugin.zsh'
