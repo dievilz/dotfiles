@@ -1,0 +1,24 @@
+/usr/bin/sh --login -i              1977
+/usr/bin/csh --login -i             1978
+/usr/bin/tcsh --login -i            1983
+/usr/bin/ksh --login -i             1983
+/usr/bin/ash --login -i             1989
+/usr/bin/bash --login -i            1989
+/usr/bin/zsh --login -i             1990
+/usr/bin/dash --login -i            1997
+/usr/bin/pdksh --login -i           1999
+/usr/bin/posh --login -i            200?
+/usr/bin/mksh --login -i            2002
+/usr/bin/fish --login -i            2005
+/usr/bin/yash --login -i            2007
+/usr/bin/loksh --login -i           2013
+/usr/bin/oksh --login -i            2015
+/usr/bin/elvish --login -i          2016
+/usr/bin/xonsh --login -i           2016
+/usr/bin/osh --login -i             2016
+/usr/bin/mrsh --login -i            2018
+/usr/bin/crush --login -i           2019
+/usr/bin/modernish --login -i       2019
+/usr/bin/koi --login -i             2020 oct
+/usr/bin/123456sh --login -i
+/usr/bin/nonexistentsh --login -i

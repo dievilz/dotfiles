@@ -1,0 +1,93 @@
+
+TERMCOL xterm Colors
+
+TERMCOL    ANSI    RGB(3/4-bit)       8-bit   HEX       HSV
+           BG/FG                                                  *
+---------  ------  ----------------   -----   -------   -----------
+  black    30 40   rgb(  0,  0,  0) |  00   | #         hsv()
+  red      31 41   rgb(205,  0,  0) |  01   | #
+  green    32 42   rgb(  0,205,  0) |  02   | #
+  yellow   33 43   rgb(205,205,  0) |  03   | #
+  blue     34 44   rgb(  0,  0,238) |  04   | #
+  magenta  35 45   rgb(205,  0,205) |  05   | #
+  cyan     36 46   rgb(  0,205,205) |  06   | #
+  white    37 47   rgb(229,229,229) |  07   | #
+brblack    90 100  rgb(127,127,127) |  08   | #
+brred      91 101  rgb(255,  0,  0) |  09   | #
+brgreen    92 102  rgb(  0,255,  0) |  10   | #
+bryellow   93 103  rgb(255,255,  0) |  11   | #
+brblue     94 104  rgb( 92, 92,255) |  12   | #
+brmagenta  95 105  rgb(255,  0,255) |  13   | #
+brcyan     96 106  rgb(  0,255,255) |  14   | #
+brwhite    97 107  rgb(255,255,255) |  15   | #
+-------------------------------------------------------------------
+
+
+
+
+Solarized Color Values
+
+SOLARIZED HEX       TERMCOL  XTERM/HEX
+--------- -------   -------  -----------
+base03    #002b36 | brblack  234 #1c1c1c
+base02    #073642 | black    235 #262626
+base01    #586e75 | brgreen  240 #585858
+base00    #657b83 | bryellow 241 #626262
+base0     #839496 | brblue   244 #808080
+base1     #93a1a1 | brcyan   245 #8a8a8a
+base2     #eee8d5 | white    254 #e4e4e4
+base3     #fdf6e3 | brwhite  230 #ffffd7
+red       #dc322f | red      160 #d70000
+green     #859900 | green     64 #5f8700
+yellow    #b58900 | yellow   136 #af8700
+blue      #268bd2 | blue      33 #0087ff
+magenta   #d33682 | magenta  125 #af005f
+cyan      #2aa198 | cyan      37 #00afaf
+orange    #cb4b16 | brred    166 #d75f00
+violet    #6c71c4 | brmagenta 61 #5f5faf
+
+RGB                   HSB/HSV               L*A*B              16/8
+------------------    ----------------      ---------------    ----
+rgb(  0,  43,  54)    hsv(193,100%, 21%)    lab(15,-12,-12)     8/4
+rgb(  7,  54,  66)    hsv(192, 90%, 26%)    lab(20,-12,-12)     0/4
+rgb( 88, 110, 117)    hsv(194, 25%, 46%)    lab(45,-07,-07)    10/7
+rgb(101, 123, 131)    hsv(195, 23%, 51%)    lab(50,-07,-07)    11/7
+rgb(131, 148, 150)    hsv(186, 13%, 59%)    lab(60,-06,-03)    12/6
+rgb(147, 161, 161)    hsv(180,  9%, 63%)    lab(65,-05,-02)    14/4
+rgb(238, 232, 213)    hsv( 44, 11%, 93%)    lab(92,-00, 10)     7/7
+rgb(253, 246, 227)    hsv( 44, 10%, 99%)    lab(97, 00, 10)    15/7
+rgb(220,  50,  47)    hsv(  1, 79%, 86%)    lab(50, 65, 45)     1/1
+rgb(133, 153,   0)    hsv( 68,100%, 60%)    lab(60,-20, 65)     2/2
+rgb(181, 137,   0)    hsv( 45,100%, 71%)    lab(60, 10, 65)     3/3
+rgb( 38, 139, 210)    hsv(205, 82%, 82%)    lab(55,-10,-45)     4/4
+rgb(211,  54, 130)    hsv(331, 74%, 83%)    lab(50, 65,-05)     5/5
+rgb( 42, 161, 152)    hsv(175, 74%, 63%)    lab(60,-35,-05)     6/6
+rgb(203,  75,  22)    hsv( 18, 89%, 80%)    lab(50, 50, 55)     9/3
+rgb(108, 113, 196)    hsv(237, 45%, 77%)    lab(50, 15,-45)    13/5
+
+
+
+
+Solarized (Bright Colors)
+
+Shades (SHD) Analysis for the best Bright Colors for Solarized
+Veredict: The balance is at 10%
+
+SOLARIZED HEX       BRIGHT       SHD@05%    SHD@10%    SHD@15%
+--------- -------   ---------    -------    -------    -------
+base03    #002b36
+base02    #073642
+base01    #586e75
+base00    #657b83
+base0     #839496
+base1     #93a1a1
+base2     #eee8d5
+base3     #fdf6e3
+red       #dc322f   brred        #e04845    #e35d5b    #e77370
+green     #859900   brgreen      #9bb300    #b1cc00    #c8e600
+yellow    #b58900   bryellow     #cf9c00    #e8b000    #ffc202
+blue      #268bd2   brblue       #3797db    #4ca2df    #62ade3
+magenta   #d33682   brmagenta    #d84b8f    #dc609c    #e175a9
+cyan      #2aa198   brcyan       #2fb5ab    #35c9be    #48cfc5
+orange    #cb4b16   brorange     #e25318    #e8632c    #eb7443
+violet    #6c71c4   brviolet     #7e83cb    #9094d3    #a3a6da

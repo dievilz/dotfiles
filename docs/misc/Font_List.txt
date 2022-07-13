@@ -1,0 +1,163 @@
+// FONT TESTING
+function The_QuickBrown(@fox) {
+	if (iIlL !== [ "oO0": '+QqGgYy' ]) {
+		// {}[]()<>/\ +-=
+		'qwertyuiop asdfghjkl zxcvbnm'
+		"QWERTYUIOP ASDFGHJKL ZXCVBNM"
+		var num = 1234567890;
+	}
+}
+const func = (a, b, c, d, e, f, s, n) => {
+	if (a++ && b-- || c >= d || e <= f) {
+	}
+	if (s === 'string' && n !== 999 ) {
+	}
+	if ( a == b && c != d)
+
+	a <- b <-- c <== d
+
+	a <| b |> c -> d ==> e
+}
+“Hello World!”
+‘Hello World?’
+const arr = () => [];
+const obj = () => ({});
+const jsx = () => <div />
+object o;
+if (o is int i || (o is string s &&
+	int.TryParse(s, out i)) { /* use i */ }
+var x = 0xABCDEF;
+
+
+
+ABCDEFGHIJKLMNÑOPQRSTUVWXYZ
+abcdefghijklmnñopqrstuvwxyz
+º1234567890'¡<,-.ñ´ç`+
+ª!"·$%&/()=?¿>;_:Ñ¨Ç^*
+\|@#¢∞¬÷“”≠´‚≤„–…~{}[]
+°ı˝•£‰ ⁄‘’≈¸˛≥ —…˜«»ˆ±
+[| |] {| |} <| |> ::;;--+++
+<==< <=< <== <= <--< <-< <-- <- <---> <--> <->
+>==> >=> ==> => >--> >-> --> -> <===> <==> <=>
+<tag><tag/> https://www.google.com
+<!-- HTML Comment -->  0xABCDEF
+i++; ## ### ####***&&||<></>
+== === != !== <<< << >> >>> .-
+
+
+
+
+VSCode
+Si quieres letra grande con el mismo interlineado que Sublime, usa fontSize: 12
+y lineHeight: 16 y aplica. Después sube a fontSize: 14 y listo.
+
+
+
+
+
+Sublime Text Font Switcher
+
+Smallest can be (Condensed)
+Small on 15" Retina, Good on 1080p Monitors
+    Fira Code        RobotoMono      OperatorMono   Fantasque
+       12               12               13.5         13.5
+        0                1                0           -1
+        0                0               -0.5          0
+    Smallest          Smallest         Smallest     Smallest
+-------------------------------------------------
+       12.9             13               14
+       -1               -1               -0.5
+        1                0               -0.5
+     Smaller     SmallerButVarelyNoticeableThanBelow
+
+Medium size, But not Use it, Below is better
+Good on 15" Retina,  StillGood on 1080p Monitors
+       13.3             13.5             14.7        14.9
+       -1.5             -1               -1          -1.5
+        0                0               -2           0
+    BtrRenderd    ALittleBitBigger       SameSizeAsOthers
+
+-------------------------------------------------
+Biggest can be
+Good on 15" Retina,  Big on 1080p Monitors
+       13.8             13.9             15          15.5
+       -1.5             -1               -1          -1.5
+        0                0               -2          -0.5
+     Biggest          Biggest          Biggest      Biggest
+
+
+1 ---------------------------------------------------------
+		{
+			"font_face": "Fira Code Light",
+			"font_size": 12,
+			"line_padding_bottom": 0,
+			"line_padding_top": 0,
+		},
+		{
+			"font_face": "Roboto Mono Light",
+			"font_size": 12,
+			"line_padding_bottom": 1,
+			"line_padding_top": 0,
+		},
+		{
+			"font_face": "Operator Mono XLight",
+			"font_size": 13.5,
+			"line_padding_bottom": 0,
+			"line_padding_top": -0.5,
+		},
+		{
+			"font_face": "Fantasque Sans Mono Regular",
+			"font_size": 13.5,
+			"line_padding_bottom": -1,
+			"line_padding_top": 0,
+		},
+2 ---------------------------------------------------------
+		{
+			"font_face": "Fira Code Light",
+			"font_size": 13.3,
+			"line_padding_bottom": -1.5,
+			"line_padding_top": 0,
+		},
+		{
+			"font_face": "Roboto Mono Light",
+			"font_size": 13.5,
+			"line_padding_bottom": -1,
+			"line_padding_top": 0,
+		},
+		{
+			"font_face": "Operator Mono Light",
+			"font_size": 14.7,
+			"line_padding_bottom": -1,
+			"line_padding_top": -2,
+		},
+		{
+			"font_face": "Fantasque Sans Mono Regular",
+			"font_size": 14.9,
+			"line_padding_bottom": -1.5,
+			"line_padding_top": 0,
+		},
+Biggest ---------------------------------------------------
+		{
+			"font_face": "Fira Code Light",
+			"font_size": 13.8,
+			"line_padding_bottom": -1.5,
+			"line_padding_top": 0,
+		},
+		{
+			"font_face": "Roboto Mono Light",
+			"font_size": 13.9,
+			"line_padding_bottom": -1,
+			"line_padding_top": 0,
+		},
+		{
+			"font_face": "Operator Mono Light",
+			"font_size": 15,
+			"line_padding_bottom": -1,
+			"line_padding_top": -2,
+		},
+		{
+			"font_face": "Fantasque Sans Mono Regular",
+			"font_size": 15.5,
+			"line_padding_bottom": -1.5,
+			"line_padding_top": -0.5,
+		},

@@ -1,0 +1,159 @@
+########################### Dock Apps Order ###########################
+## Remove FaceTime, Messages, Maps, Contacts, Reminders, then jump to
+## Podcasts, ATV, (News). Every 3rd Party App goes after Apple Store.
+## After the 3PApps, goes Disk Utility, Activity Monitor before SysPrefs
+
+
+
+######################## 1RA PAGINA: Core Apps ########################
+#### ----------------- Safari Extensions Folder -----------------------
+## Hacer carpeta "Safari" y agrupar ahí las extensiones (macOS 11)
+
+#### ----------------------- iOffice Suite ----------------------------
+### Despues de Voice Memos, poner iOffice Suite
+"Pages"
+"Numbers"
+"Keynote"
+
+#### ---------------------- Old iLife Suite ---------------------------
+### Hacer carpeta "iLife" y agrupar ahí todo lo siguiente
+"iMovie"
+"iPhotos"
+"Garage Band"
+
+#### ------------------------- Utilities ------------------------------
+## Renombrar carpeta "Other" to "Utilities" y meter:
+## QuickTime, TextEdit, Time Machine, Font Book, Chess,
+## Stickies, Image Capture, Automator (, DVD Player)...
+## (Grapher, V.O... Migration Assist, Terminal...)
+
+#### --------------------------- iPro ---------------------------------
+"Final Cut Pro"                                                       #x
+"Compressor"
+"Logic Pro"
+"Motion"
+
+
+
+######################## 2DA PAGINA: Main Apps ########################
+#### --------------------- MenuBar-only Apps --------------------------
+"Memory Clean 2",                                       # RAM "manager"
+"Magnet",                                              # Window manager
+"clipy"                                             # Clipboard manager
+### Agrupar KarabinerE, K.E.V. y B.T.T. en "Karabiner-Elements"
+"karabiner-elements"                              # Keyboard customizer
+"bettertouchtool"                          # Input devices manager tool
+"ToothFairy",                                # External devices managerx
+"switchresx"                                # External monitors managerx
+"LyricsX",                                      # Live lyrics displayer
+"Time Out",                                            # Break reminder
+"vanilla"                                      # Menubar unclutter toolx
+
+#### ---------------- Background-Only Apps (W/o GUI) ------------------
+"statusfy"                                        # Music status viever
+"macmediakeyforwarder"                                  # Key forwarder
+"cheatsheet"                            # Command ⌘ shorcuts cheatsheet
+"soundflower"                                # Audio virtual controller
+"Fenêtre Lite",                               # Picture-in-picture tool
+
+#### ------------------------ SysHelper Apps --------------------------
+"appcleaner"                                          # App uninstaller
+"DaisyDisk",                                    # Storage analizer toolx
+"drivedx",                               # Storage drives analizer toolx
+"paragon-ntfs"                                 # NTFS Filesystem Readerx
+"alfred"                                           # A better Spotlightx
+"Keka",                                               # File compressorx
+"MediaInfo" # github.com/sbarex/MediaInfo,            # Metadata viewer
+"tinker-tool"                                 # macOS's Defaults editor
+"malwarebytes"                                              # Antivirus
+"malwarebytes-privacy"                                            # VPN
+
+#### ---------------------- UserHelper Apps ---------------------------
+"vlc"                                                    # Media player
+"handbrake"                                          # Media compressor
+"deluge"                                               # Torrent client
+"licecap"                                          # Record screen GIFs
+### Agrupar <meta> junto con <yate> y <kid3> en "Music Taggers"
+"meta"                                                   # Music taggerx
+"yate"                                                   # Music taggerx
+"kid3"                                                   # Music tagger
+"ApolloOne - Photo Video Viewer", id: 1044484672         # Media viewer
+"Spark",                                                  # Mail client
+"dropbox"                                               # Cloud storage
+"iterm2"                                                     # Terminal
+
+#### -------------------- Entertainment Apps --------------------------
+"google-chrome"
+"chromium"
+"brave-browser"
+"firefox-developer-edition"
+"spotify"
+"steam"
+"minecraft"
+"discord"
+"flume"                                              # Instagram client
+"parallels"                                                           #x
+### Carpeta con las Win apps del VM de Parallels
+
+
+
+######################## 3RA PAGINA: Dev Apps #########################
+#### ----------------- Code-Editors/IDE/Diffs Apps --------------------
+"sublime-text"                                            # Text editor
+"visual-studio-code"                                  # Lightweight IDE
+"macdown"                                        # Markdown text editor
+"plistedit-pro"                                    # .plist File editorx
+"Xcode",                                 # IDE; Instalar hasta el final
+"eclipse-installer"                                               # IDE
+"netbeans"                                                        # IDE
+"arduino"                                                 # Arduino IDE
+"Kaleidoscope",                                           # Diff editorx
+"diffchecker-pro"                                         # Diff editorx
+"deltawalker"                                             # Diff editor
+
+#### -------------------------- Git Apps ------------------------------
+"gitup"                                # Git client, best branch viewer
+"sublime-merge"                                            # Git client
+"gitkraken"                                                # Git clientx
+
+#### ------------------------ Database Apps ---------------------------
+"dbngin"                             # Database version management tool
+"sequel-pro"                                             # MySQL client
+"sql-editor"                                    # SQL database designerx
+"mongodb-compass-community"                            # MongoDB client
+
+#### ------------------------- Server Apps ----------------------------
+"valentina-editor"
+"filezilla" # dejarlo en Downloads,antes cyberduck
+"postman"                                                 # REST client
+
+#### ----------------------- Sketching Apps ---------------------------
+"sketch"                                        # Vector graphic editorx
+"yed"                                            # Graph/diagram editor
+"Diagrams",                                            # Diagram editorx
+"fritzing"                           # Electronic design automation app
+"craftmanager"                              # Plugin manager for Sketch
+
+#### --------------------------- Office -------------------------------
+## Word, PowerP, Excel y OneDrive
+
+#### --------------------- Adobe Creative Cloud -----------------------
+## Adobe Photoshop, Illustrator, InDesign, After Effects,
+## Lightroom, Bridge, PremierePro
+## (Agrupa en "Creative Cloud": Creative Cloud [CC,
+## DesktopApp, CloudHelper, Troubleshooter], Core Sync,
+## CCXProcess, Installer, AIPCBroker, ACCFinderBundleLoader, GCClient,
+## CleanUpAUtility)
+## (Agrupa en "Adobe Plugins": Cinema4D, AAERenderEngine, AMEncoder)
+
+
+
+#### ---------------------- QuickLook Plugins -------------------------
+"qlcolorcode"
+"qlmarkdown"
+"qlstephen"
+"qlvideo"
+"quicklook-csv"
+"quicklook-json"
+"rcdefaultapp" # Deprecated
+"swiftdefaultappsprefspane"
