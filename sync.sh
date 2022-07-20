@@ -15,8 +15,7 @@ DOTFILES="$(realpath "$0" | grep -Eo '^.*?\.dotfiles')" ## -o: only matching
 }
 
 
-################################### DOTFILES ###################################
-############################# SYNC DOTS FUNCTIONS ##############################
+############################################# DOTFILES #############################################
 
 syncHomeFiles_sync() \
 {
@@ -58,7 +57,7 @@ syncHomeFiles_sync() \
 	echo
 }
 
-syncEtcFiles() \
+syncEtcRootFiles() \
 {
 	subopt "Symlinking Dotfiles to /etc..."
 	enter_sudo_mode
@@ -104,7 +103,7 @@ syncEtcFiles() \
 	echo
 }
 
-syncOptFiles() \
+syncOptRootFiles() \
 {
 	subopt "Creating folders at /opt for Dotfiles"
 
@@ -125,10 +124,8 @@ syncOptFiles() \
 	sudo rsync --exclude=".*" -ahPv "$DOTFILES/root/opt/" "/opt"
 	echo
 }
+# --------------------------------------------------------------------------------------------------
 
-
-
-############################# SYNC BINS FUNCTIONS ##############################
 
 syncBins() \
 {
@@ -138,11 +135,7 @@ syncBins() \
 	echo
 }
 
-
-
-############################ SYNC FOLDERS FUNCTIONS ############################
-
-makeDirs() \
+syncMakeDirs() \
 {
 	subopt "Making some folders on \$HOME first..."
 
@@ -293,7 +286,7 @@ syncShellFilesFolders_sync() \
 	[ ! -d "$ZDOTDIR" ] && mkdir -pv "$ZDOTDIR"
 	[ ! -d "$BASHDOTDIR" ] && mkdir -pv "$BASHDOTDIR"
 	[ ! -d "$SHELL_HOME" ] && mkdir -pv "$SHELL_HOME"
-	# -----------------------------------------------------------------------------------------------
+	# -----------------------------------------------------------------------------------
 
 	while IFS= read -r -d '' zfolders;
 	do
@@ -327,7 +320,7 @@ syncShellFilesFolders_sync() \
 	[ -f "$ZDOTDIR/zprofile" ] && mv -v "$ZDOTDIR/zprofile" "$ZDOTDIR/.zprofile"
 	[ -f "$ZDOTDIR/zshrc" ] && mv -v "$ZDOTDIR/zshrc" "$ZDOTDIR/.zshrc"
 	[ -f "$ZDOTDIR/zlogin" ] && mv -v "$ZDOTDIR/zlogin" "$ZDOTDIR/.zlogin"
-	# -----------------------------------------------------------------------------------------------
+	# -----------------------------------------------------------------------------------
 
 	while IFS= read -r -d '' bthemes;
 	do
@@ -345,7 +338,7 @@ syncShellFilesFolders_sync() \
 		printf "%b" "Changing permissions: " && chmod -v 700 "$HOME/.$(basename "$brc")"
 	done \
 	< <(find "$DOTFILES/home/config/bash" -name "bash*" -type f -print0)
-	# -----------------------------------------------------------------------------------------------
+	# -----------------------------------------------------------------------------------
 
 	while IFS= read -r -d '' shllfiles;
 	do
@@ -365,7 +358,7 @@ syncShellFilesFolders_sync() \
 		ln -fsv "$shllfiles" "$SHELL_HOME/$shllfilesPath"
 	done \
 	< <(find "$DOTFILES/home/config/shell" -type f -print0)
-	# -----------------------------------------------------------------------------------------------
+	# -----------------------------------------------------------------------------------
 
 
 	if [ -w "$HOME" ]; then
@@ -579,11 +572,11 @@ syncEtcFolders() \
 	echo
 }
 
-################################################################################
+####################################################################################################
 
 
 
-################################# TEXT EDITORS #################################
+########################################### TEXT EDITORS ###########################################
 
 basicsSublimeText() \
 {
@@ -702,7 +695,7 @@ basicsVScode() \
 	echo
 }
 
-# ------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
 
 fullSublimeText() \
 {
@@ -754,11 +747,11 @@ fullVscode() \
 	echo
 }
 
-################################################################################
+####################################################################################################
 
 
 
-################################# PREFERENCES ##################################
+########################################### PREFERENCES ############################################
 
 setup_preferences() \
 {
@@ -779,26 +772,26 @@ setup_preferences() \
 			*)
 			mkdir -pv "$HOME/Library/Application Support/Spotify/Users/$spotifyUID-user"
 			trdopt "Copying Spotify preferences"
-			rsync -ahPv "$DOTFILES"/home/config/spotify/prefs \
+			cp -v "$DOTFILES"/home/config/spotify/prefs \
 			"$HOME/Library/Application Support/Spotify/Users/$spotifyUID-user/prefs"
 			;;
 		esac
 
 		if [ -d "$HOME/Library/Containers/com.aone.keka/Data/Library/Preferences" ];
 		then
-			rsync -ahPv "$DOTFILES/home/Library/Containers/lyricsx/com.aone.keka.plist" \
+			cp -v "$DOTFILES/home/Library/Containers/lyricsx/com.aone.keka.plist" \
 			"$HOME"/Library/Containers/com.aone.keka/Data/Library/Preferences/
 		fi
 
 		if [ -d "$HOME/Library/Containers/ddddxxx.LyricsX/Data/Library/Preferences" ];
 		then
-			rsync -ahPv "$DOTFILES/home/Library/Containers/lyricsx/ddddxxx.LyricsX.plist" \
+			cp -v "$DOTFILES/home/Library/Containers/lyricsx/ddddxxx.LyricsX.plist" \
 			"$HOME"/Library/Containers/ddddxxx.LyricsX/Data/Library/Preferences/
 		fi
 
 		if [ -d "$HOME/Library/Containers/com.fiplab.memoryclean2/Data/Library/Preferences/" ];
 		then
-			rsync -ahPv "$DOTFILES/home/Library/Containers/memoryclean2/com.fiplab.memoryclean2.plist" \
+			cp -v "$DOTFILES/home/Library/Containers/memoryclean2/com.fiplab.memoryclean2.plist" \
 			"$HOME"/Library/Containers/com.fiplab.memoryclean2/Data/Library/Preferences/
 		fi
 
@@ -810,7 +803,7 @@ setup_preferences() \
 				'{len=length(a)}{print substr($0,len)}')"
 			# echo "$prefFilePath" # "/<file>"
 
-			rsync -ahPv --exclude=".*" "$prefFile" "$HOME/Library/Preferences/$prefFilePath"
+			cp -Rv "$prefFile" "$HOME/Library/Preferences/$prefFilePath"
 		done \
 		< <(fd . "$DOTFILES/home/Library/Preferences" -d 1 --type f -0)
 		echo
@@ -821,6 +814,8 @@ setup_preferences() \
 	esac
 	echo
 }
+
+############################################# LIBRARY ##############################################
 
 setup_library_macos() \
 {
@@ -898,7 +893,7 @@ setup_library_timeout() \
 
 		if [ ! -e "$HOME/Library/Group Containers/$timeOutFolder$timeOutFilePath" ];
 		then
-			rsync -ahPv --exclude=".*" "$timeOutFile" \
+			cp -Rv "$timeOutFile" \
 			"$HOME/Library/Group Containers/$timeOutFolder$timeOutFilePath"
 		fi
 	done \
@@ -923,7 +918,7 @@ setup_library_yed() \
 
 		if [ ! -e "$HOME/Library/yWorks/$yEdFilePath" ];
 		then
-			rsync -ahPv --exclude=".*" "$yEdFile" "$HOME/Library/yWorks/$yEdFilePath"
+			cp -Rv "$yEdFile" "$HOME/Library/yWorks/$yEdFilePath"
 		fi
 	done < <(fd . "$DOTFILES/home/Library/yWorks/yEd" -d 5 -t f -0)
 	echo
@@ -940,16 +935,16 @@ setup_library_quicklook() \
 		rsync -ahPv --exclude=".*" "$qlgen" "$HOME/Library/QuickLook/"
 	done \
 	< <(find "$HOME/Library/Mobile Documents/com~apple~CloudDocs/QuickLook"\
-		-name "*.qlgenerator" -maxdepth 1 -type d-print0)
+		-name "*.qlgenerator" -maxdepth 1 -type d -print0)
 	echo
 
 	trdopt "Rsyncing QuickLook Generators config files..."
 	[ -d "$HOME/Library/QuickLook/QLColorCode.qlgenerator/Contents" ] && \
-	rsync -ahPv "$DOTFILES/home/Library/QuickLook/QLColorCode.ql/Info.plist" \
+	cp -v "$DOTFILES/home/Library/QuickLook/QLColorCode.ql/Info.plist" \
 	"$HOME"/Library/QuickLook/QLColorCode.qlgenerator/Contents/Info.plist
 
 	[ -d "$HOME/Library/QuickLook/QLStephen.qlgenerator/Contents" ] && \
-	rsync -ahPv "$DOTFILES/home/Library/QuickLook/QLStephen.ql/Info.plist" \
+	cp -v "$DOTFILES/home/Library/QuickLook/QLStephen.ql/Info.plist" \
 	"$HOME"/Library/QuickLook/QLStephen.qlgenerator/Contents/Info.plist
 
 	echo
@@ -1001,11 +996,11 @@ setup_library_sounds() \
 	echo
 }
 
-################################################################################
+####################################################################################################
 
 
 
-########################## WALLPAPERS, LYRICS & FONTS ##########################
+#################################### WALLPAPERS, LYRICS & FONTS ####################################
 
 setup_wallpapers() \
 {
@@ -1153,11 +1148,11 @@ setup_fonts() \
 	echo
 }
 
-################################################################################
+####################################################################################################
 
 
 
-############################ REMOVE DOTS FUNCTIONS #############################
+######################################### REMOVE DOTFILES ##########################################
 
 removeFiles() \
 {
@@ -1275,11 +1270,11 @@ removeTextEditors() \
 	echo
 }
 
-################################################################################
+####################################################################################################
 
 
 
-############################## VERIFY FUNCTIONS ################################
+######################################## VERIFY FUNCTIONS ##########################################
 
 verifyRsyncUtility() \
 {
@@ -1385,16 +1380,16 @@ menu_sync() \
 					echo; syncHomeFiles_sync
 				;;
 				"etcroot")
-					echo; syncEtcFiles
+					echo; syncEtcRootFiles
 				;;
 				"optroot")
-					echo; syncOptFiles
+					echo; syncOptRootFiles
 				;;
 				"bins")
 					echo; syncBins
 				;;
 				"makedirs")
-					echo; makeDirs
+					echo; syncMakeDirs
 				;;
 				"shell")
 					echo; syncShellFilesFolders_sync
