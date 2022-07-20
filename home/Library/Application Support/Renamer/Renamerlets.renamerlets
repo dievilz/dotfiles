@@ -372,8 +372,8 @@
                   "type" : "variable"
                 },
                 {
-                  "value" : " - ",
-                  "label" : " - ",
+                  "value" : "_{",
+                  "label" : "_{",
                   "type" : "literal"
                 },
                 {
@@ -390,6 +390,11 @@
                   "value" : "Model",
                   "label" : "Camera Model",
                   "type" : "format"
+                },
+                {
+                  "value" : "}",
+                  "label" : "}",
+                  "type" : "literal"
                 }
               ]
             }
@@ -722,8 +727,8 @@
               "step" : 1,
               "prefix_suffix_text" : "-(",
               "string_format" : 1,
-              "offset" : 17,
-              "numbering_mode" : 1,
+              "offset" : 1,
+              "numbering_mode" : 2,
               "file_part" : 0
             },
             {
@@ -742,7 +747,7 @@
             {
               "identifier" : "regular expression",
               "case_sensitive" : true,
-              "search_string" : "[0-9][0-9][0-9]-1",
+              "search_string" : "CSM__Makima-[0-9][0-9][0-9]",
               "file_part" : 0
             },
             {
